@@ -1,8 +1,8 @@
 package com.chendu.jq.test;
 
-import com.chendu.jq.JqTrade;
-import com.chendu.jq.equity.VanillaOption;
-import com.chendu.jq.util.TableWithHeader;
+import com.chendu.jq.core.JqTrade;
+import com.chendu.jq.core.equity.VanillaOption;
+import com.chendu.jq.core.util.TableWithHeader;
 import org.junit.Test;
 
 import java.util.List;

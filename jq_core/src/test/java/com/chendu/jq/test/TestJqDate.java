@@ -1,6 +1,6 @@
 package com.chendu.jq.test;
 
-import com.chendu.jq.util.JqParser;
+import com.chendu.jq.core.util.JqParser;
 import org.junit.Test;
 
 import java.time.LocalDate;
