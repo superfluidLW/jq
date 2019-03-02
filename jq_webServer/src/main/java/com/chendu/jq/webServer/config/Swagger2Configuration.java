@@ -22,10 +22,10 @@ import java.util.List;
 
 @Configuration
 @EnableSwagger2
-@ConditionalOnProperty(
-        name = "application.prodMode",
-        havingValue = "false"
-)
+//@ConditionalOnProperty(
+//        name = "application.prodMode",
+//        havingValue = "false"
+//)
 public class Swagger2Configuration {
 
     @Value("${host.name}")
