@@ -11,5 +11,8 @@ import java.io.Serializable;
 public class ValueSingleTradeRequest implements Serializable {
 
     @ApiModelProperty(value="交易信息",name="tradeInfo",example="SampleTradeInfo",required=true)
-    private String tradeInfo;
+    private String[][] tradeInfo;
+
+    @ApiModelProperty(value="交易信息",name="tradeInfo",example="SampleTradeInfo",required=true)
+    private String mktInfoJson;
 }
