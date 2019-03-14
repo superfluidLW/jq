@@ -1,1 +1,1 @@
-# jqPanel
+# I feel the need, the need for Java Quantitative Library!

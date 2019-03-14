@@ -1,9 +1,9 @@
 package com.chendu.jq.test;
 
 import com.chendu.jq.core.util.JsonUtils;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -16,18 +16,35 @@ import org.apache.http.message.BasicNameValuePair;
 import org.junit.Test;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class JnlcSpider {
     private SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssZ");
     private SimpleDateFormat toFormat = new SimpleDateFormat("yyMMddHHmmssZ");
 
+    class LData implements Comparable<LData> {
+        public String date;
+        public String bankName;
+        public Boolean principalProtection;
+        public Double yield;
+
+        @Override
+        public int compareTo(LData o) {
+            return LocalDate.parse(this.date).compareTo(LocalDate.parse(o.date));
+        }
+    }
+
     @Test
     public void jnlcParser(){
         try {
             BufferedReader reader = new BufferedReader(new FileReader("D:\\financialProduct.txt"));
+            List<LData> arrData = new ArrayList<>();
+
             File file = new File("D:\\description.txt");
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 
@@ -35,7 +52,7 @@ public class JnlcSpider {
             boolean headerWritten = false;
             while (line != null){
                 HashMap<String, Object> map = JsonUtils.readValue(line, HashMap.class);
-                System.out.println(map.get("page"));
+//                System.out.println(map.get("page"));
                 List<LinkedHashMap<String, Object>> rows = (List<LinkedHashMap<String, Object>>)map.get("rows");
                 for (LinkedHashMap<String, Object> row:rows
                      ) {
@@ -44,6 +61,7 @@ public class JnlcSpider {
                         bw.newLine();
                         headerWritten = true;
                     }
+                    arrData.add(toLData(row));
                     bw.write(concatenate(row));
                     bw.newLine();
                 }
@@ -52,6 +70,31 @@ public class JnlcSpider {
 
             reader.close();
             bw.close();
+
+            arrData = arrData.stream().filter(e -> StringUtils.isNotEmpty(e.date) && e.yield != null).collect(Collectors.toList());
+            Collections.sort(arrData);
+            Map<String, List<LData>> dateLDataMap = arrData.stream().collect(Collectors.groupingBy(e -> e.date));
+            List<String> sortedKeys = new ArrayList<>();
+            sortedKeys.addAll(dateLDataMap.keySet());
+            Collections.sort(sortedKeys);
+            for (String date:sortedKeys
+                 ) {
+                if(StringUtils.isEmpty(date)){
+                    continue;
+                }
+                Double yield = 0.0;
+                Integer nonZeroNum = 0;
+                String str = date + "\t";
+
+                str += dateLDataMap.get(date).stream().filter(e -> e.principalProtection != null && e.principalProtection).count();
+                str += "\t";
+                str +=  dateLDataMap.get(date).stream().filter(e -> e.principalProtection != null &&e.principalProtection).filter(e -> e.yield != null).mapToDouble(e -> e.yield).average();
+                str += "\t";
+                str +=  dateLDataMap.get(date).stream().filter(e -> e.principalProtection != null && !e.principalProtection).count();
+                str += "\t";
+                str +=  dateLDataMap.get(date).stream().filter(e -> e.principalProtection != null && !e.principalProtection).filter(e -> e.yield != null).mapToDouble(e -> e.yield).average();
+                System.out.println(str);
+            }
         }
         catch (Exception ex){
             ex.printStackTrace();
@@ -75,6 +118,15 @@ public class JnlcSpider {
                 "发行地区"
                 );
         return StringUtils.join(contents, "\t");
+    }
+
+    private LData toLData(LinkedHashMap<String, Object> row){
+        LData lData = new LData();
+        lData.date = toyyyyMM((String)row.get("sdtFinaStart"));
+        lData.bankName =(String)row.get("strOrganShort");
+        lData.yield = row.get("dYqnhsylsx") != null ? Double.parseDouble(row.get("dYqnhsylsx").toString()) : null;
+        lData.principalProtection = row.get("strProfitType") != null ? row.get("strProfitType").toString().startsWith("保本") : null;
+        return lData;
     }
 
     private String concatenate(LinkedHashMap<String, Object> row) {
@@ -101,6 +153,17 @@ public class JnlcSpider {
         String dateStr = "/Date(1555948800000+0800)/";
         String newDateStr = toDate(dateStr);
         assert newDateStr.equals("2019-04-23");
+    }
+
+    private String toyyyyMM(String dateStr){
+        if(StringUtils.isEmpty(dateStr)){
+            return "";
+        }
+        String str=dateStr.replace("/Date(","").replace(")/","");
+        String time = str.substring(0,str.length()-5);
+        Date date = new Date(Long.parseLong(time));
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
+        return format.format(date) + "-01";
     }
 
     private String toDate(String dateStr){
