@@ -11,9 +11,24 @@ import java.io.FileWriter;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Slf4j
 public class Adhoc {
+
+    @Test
+    public void testSubStr(){
+        String name="xyzuai";
+        System.out.println(name.substring(1, name.length()));
+    }
+
+    @Test
+    public void testRegularExpression(){
+        Pattern pattern = Pattern.compile("Windows.*余额(?!b|c)");
+        System.out.println(pattern.matcher("Windows31余额").matches());
+        System.out.println(pattern.matcher("Windows余额b").matches());
+        System.out.println(pattern.matcher("Windows余额c").matches());
+    }
 
     @Test
     public void printIterative() throws Exception{
