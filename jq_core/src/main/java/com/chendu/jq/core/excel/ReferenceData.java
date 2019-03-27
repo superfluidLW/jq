@@ -1,6 +1,5 @@
-package com.chendu.jq.excel.util;
+package com.chendu.jq.core.excel;
 
-import com.chendu.jq.core.excel.JqProp;
 import com.exceljava.jinx.ExcelAddIn;
 import com.exceljava.jinx.ExcelFunction;
 import com.exceljava.jinx.ExcelMacro;

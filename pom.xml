@@ -16,7 +16,6 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>jq_core</module>
-        <module>jq_excel</module>
     </modules>
 
     <properties>
