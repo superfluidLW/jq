@@ -1,6 +1,6 @@
 package com.chendu.jq.core.common;
 
-import com.chendu.jq.core.common.jqEnum.BusinessDayConvention;
+import com.chendu.jq.core.common.jqEnum.BizDayAdjust;
 import com.chendu.jq.core.common.jqEnum.Venue;
 import lombok.Data;
 
@@ -25,12 +25,12 @@ public class JqCalendar {
         return !holidays.contains(date);
     }
 
-    public LocalDate addDays(LocalDate date, int days2Add, BusinessDayConvention businessDayConvention){
+    public LocalDate addDays(LocalDate date, int days2Add, BizDayAdjust bizDayAdjust){
         LocalDate newDate = date.plusDays(days2Add);
-        return adjust(newDate, businessDayConvention);
+        return adjust(newDate, bizDayAdjust);
     }
 
-    public LocalDate addBizDays(LocalDate date, int days2Add, BusinessDayConvention businessDayConvention){
+    public LocalDate addBizDays(LocalDate date, int days2Add, BizDayAdjust bizDayAdjust){
         if(days2Add == 0){
             return date;
         }
@@ -43,20 +43,20 @@ public class JqCalendar {
             }
         }while (days2Add != 0);
 
-        return adjust(date, businessDayConvention);
+        return adjust(date, bizDayAdjust);
     }
 
     public LocalDate nextBizDay(LocalDate date){
-        return addBizDays(date, 1, BusinessDayConvention.None);
+        return addBizDays(date, 1, BizDayAdjust.None);
     }
 
     public LocalDate prevBizDay(LocalDate date){
-        return addBizDays(date, -1, BusinessDayConvention.None);
+        return addBizDays(date, -1, BizDayAdjust.None);
     }
 
-    private LocalDate adjust(LocalDate date, BusinessDayConvention businessDayConvention){
+    private LocalDate adjust(LocalDate date, BizDayAdjust bizDayAdjust){
         if(holidays.contains(date)) {
-            switch (businessDayConvention)
+            switch (bizDayAdjust)
             {
                 case Following:
                     return nextBizDay(date);

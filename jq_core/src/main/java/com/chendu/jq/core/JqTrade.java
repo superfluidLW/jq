@@ -1,7 +1,7 @@
 package com.chendu.jq.core;
 
-import com.chendu.jq.common.JqResult;
 import com.chendu.jq.core.common.JqCashflow;
+import com.chendu.jq.core.common.JqResult;
 import com.chendu.jq.core.common.jqEnum.TradeLabel;
 import com.chendu.jq.core.common.jqEnum.TradeType;
 import com.chendu.jq.core.market.JqMarket;

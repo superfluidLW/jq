@@ -1,7 +1,7 @@
 package com.chendu.jq.core.equity;
 
 import com.chendu.jq.core.common.JqCashflow;
-import com.chendu.jq.common.JqResult;
+import com.chendu.jq.core.common.JqResult;
 import com.chendu.jq.core.common.jqEnum.ValuationModel;
 import com.chendu.jq.core.common.jqInterface.IDayCount;
 import com.chendu.jq.core.market.JqMarket;

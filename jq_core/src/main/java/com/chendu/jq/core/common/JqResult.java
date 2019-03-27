@@ -1,4 +1,4 @@
-package com.chendu.jq.common;
+package com.chendu.jq.core.common;
 
 import lombok.Data;
 

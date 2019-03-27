@@ -2,7 +2,7 @@ package com.chendu.jq.core.common.jqEnum;
 
 import lombok.Getter;
 
-public enum BusinessDayConvention {
+public enum BizDayAdjust {
     None("无"),
     Following("下一工作日"),
     ModifiedFollowing("调整的下一工作日"),
@@ -12,7 +12,7 @@ public enum BusinessDayConvention {
     @Getter
     private String nameCn;
 
-    BusinessDayConvention(String nameCn){
+    BizDayAdjust(String nameCn){
         this.nameCn = nameCn;
     }
 }

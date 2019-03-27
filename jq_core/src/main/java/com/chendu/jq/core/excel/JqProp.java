@@ -8,7 +8,7 @@ import java.util.List;
 
 public class JqProp {
     public static String[][] GetAllProps(){
-        List<Class> enumClz = Arrays.asList(BusinessDayConvention.class, Currency.class, DayCount.class, Frequency.class, OptionDirection.class, Stub.class, TradeLabel.class, TradeType.class, ValuationModel.class, Venue.class);
+        List<Class> enumClz = Arrays.asList(BizDayAdjust.class, Currency.class, DayCount.class, Frequency.class, OptionDirection.class, Stub.class, TradeLabel.class, TradeType.class, ValuationModel.class, Venue.class);
 
         int maxLen = 0;
         for (Class cla:enumClz){

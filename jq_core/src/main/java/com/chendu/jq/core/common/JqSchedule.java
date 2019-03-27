@@ -1,6 +1,6 @@
 package com.chendu.jq.core.common;
 
-import com.chendu.jq.core.common.jqEnum.BusinessDayConvention;
+import com.chendu.jq.core.common.jqEnum.BizDayAdjust;
 import com.chendu.jq.core.common.jqEnum.Stub;
 import lombok.Data;
 
@@ -14,7 +14,7 @@ import java.util.List;
 public class JqSchedule {
     private List<LocalDate> gridDates;
 
-    public JqSchedule(LocalDate startDate, LocalDate endDate, Period period, Stub stub, JqCalendar calendar, BusinessDayConvention bdc){
+    public JqSchedule(LocalDate startDate, LocalDate endDate, Period period, Stub stub, JqCalendar calendar, BizDayAdjust bdc){
         gridDates = new ArrayList<>();
 
         switch (stub) {

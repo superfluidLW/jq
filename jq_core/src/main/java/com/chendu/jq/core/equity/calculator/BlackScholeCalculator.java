@@ -1,7 +1,7 @@
 package com.chendu.jq.core.equity.calculator;
 
 import com.chendu.jq.core.JqTrade;
-import com.chendu.jq.common.JqResult;
+import com.chendu.jq.core.common.JqResult;
 import com.chendu.jq.core.common.jqInterface.ICalculator;
 import com.chendu.jq.core.equity.Option;
 import com.chendu.jq.core.market.JqMarket;

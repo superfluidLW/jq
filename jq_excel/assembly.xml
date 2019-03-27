@@ -1,0 +1,28 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+    <id>jq_excel</id>
+    <formats>
+        <!--<format>tar.gz</format>-->
+        <format>tar.gz</format>
+    </formats>
+    <fileSets>
+        <!--配置文件拷贝-->
+        <fileSet>
+            <directory>${project.basedir}/src/main/resources/jinx/</directory>
+            <outputDirectory>/lib</outputDirectory>
+            <includes>
+                <include>jinx.ini</include>
+                <include>jinx.xll</include>
+                <include>jinx64.xll</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>/lib</outputDirectory>
+            <useProjectArtifact>true</useProjectArtifact>
+            <scope>runtime</scope>
+        </dependencySet>
+    </dependencySets>
+</assembly>

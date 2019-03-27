@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Data
 public class JqCashflow implements Serializable {
-    private LocalDate accStartDate;
+    private LocalDate accBegDate;
     private LocalDate accEndDate;
     private LocalDate refEndDate;
     private LocalDate payDate;
