@@ -1,4 +1,4 @@
-package com.chendu.jq.core.equity.calculator;
+package com.chendu.jq.core.equity.calculator.mc;
 
 import com.chendu.jq.core.JqTrade;
 import com.chendu.jq.core.common.JqResult;
