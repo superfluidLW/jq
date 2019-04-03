@@ -1,15 +1,16 @@
 package com.chendu.jq.core.util;
 
-import com.chendu.jq.core.common.jqInterface.IDayCount;
 import com.chendu.jq.core.JqTrade;
 import com.chendu.jq.core.common.jqEnum.*;
+import com.chendu.jq.core.common.jqInterface.IDayCount;
 import com.chendu.jq.core.equity.VanillaOption;
+import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -113,30 +114,42 @@ public class TableWithHeader {
     }
 
     private void assignFieldValue(Object object, Field field, String val){
-        Class clazz = field.getType();
+        Type genericType = field.getGenericType();
         Object value;
         try {
-            if (clazz.equals(Double.class)) {
+            if (genericType.equals(Double.class)) {
                 value = Double.parseDouble(val);
-            } else if (clazz.equals(String.class)) {
+            }
+            else if (genericType.equals(String.class)) {
                 value = val;
-            } else if (clazz.equals(LocalDate.class)) {
+            }
+            else if (genericType.equals(LocalDate.class)) {
                 value = JqParser.jqDateFromStr(val);
             }
-            else if(clazz.equals(TradeType.class)){
+            else if(genericType.equals(new TypeReference<List<LocalDate>>(){}.getType())){
+                List<LocalDate> dates = new ArrayList<>();
+                for (String dateStr:val.split(JqConstant.delim)) {
+                    dates.add(JqParser.jqDateFromStr(dateStr));
+                }
+                value = dates;
+            }
+            else if(genericType.equals(TradeType.class)){
                 value = JqParser.enumFromStr(val, TradeType.class);
             }
-            else if(clazz.equals(IDayCount.class)){
+            else if(genericType.equals(IDayCount.class)){
                 value = DayCount.impl(val);
             }
-            else if(clazz.equals(ValuationModel.class)){
+            else if(genericType.equals(ValuationModel.class)){
                 value = JqParser.enumFromStr(val, ValuationModel.class);
             }
-            else if(clazz.equals(OptionDirection.class)){
+            else if(genericType.equals(OptionDirection.class)){
                 value = JqParser.enumFromStr(val, OptionDirection.class);
             }
+            else if(genericType.equals(Currency.class)){
+                value = JqParser.enumFromStr(val, Currency.class);
+            }
             else {
-                JqLog.warn("Type {} is not recognized when converting table with header to internal objects");
+                JqLog.warn("Type {} is not recognized when converting table with header to internal objects", genericType);
                 return;
             }
 

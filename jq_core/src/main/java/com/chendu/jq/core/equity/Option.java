@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 public abstract class Option extends JqTrade {
     public List<LocalDate> exerciseDates;
-    public JqSymbol underlyingAssetSymbol;
+    public String underlyingAssetSymbol;
     public ValuationModel valuationModel;
     public OptionDirection optionDirection;
 
