@@ -11,8 +11,10 @@ public enum   TradeLabel {
     ValuationModel("估值方法"),
     Strike("行权价格"),
     DayCount("计息基准"),
-    OptionDirection("期权方向");
-
+    OptionDirection("期权方向"),
+    DomCurrency("本币币种"),
+    FgnCurrency("外币币种"),
+    exerciseDates("行权日期");
 
     @Getter
     private String nameCn;

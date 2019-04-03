@@ -6,13 +6,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 
-@Slf4j
 public class JsonUtils {
 
     private JsonUtils() {
@@ -42,13 +40,13 @@ public class JsonUtils {
                     return String.valueOf(object);
                 } else {
                     objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-//            log.info("type {} to json message {}", object == null ? "" : object.getClass().getSubName(), writeValueAsString2(object));
+//            JqLog.info("type {} to json message {}", object == null ? "" : object.getClass().getSubName(), writeValueAsString2(object));
                     return objectMapper.writeValueAsString(object);
                 }
             }
             return null;
         } catch(JsonProcessingException e){
-            log.error("Object To Json error", e);
+            JqLog.error("Object To Json error", e);
             return null;
         }
     }
@@ -64,7 +62,7 @@ public class JsonUtils {
             JsonNode jsonNode = objectMapper.readTree(fileUrl);
             return gson.fromJson(jsonNode.toString(), tClass);
         } catch (IOException e) {
-            log.error("file not found", e.getMessage());
+            JqLog.error("file not found", e.getMessage());
             return null;
         }
     }
@@ -75,7 +73,7 @@ public class JsonUtils {
             return message;
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("Object To Json error", e);
+            JqLog.error("Object To Json error", e);
             return null;
         }
     }
@@ -84,7 +82,7 @@ public class JsonUtils {
         try {
             return objectMapper.readValue(content, valueType);
         } catch (IOException e) {
-            log.error("Json To Object error", e);
+            JqLog.error("Json To Object error", e);
             return null;
         }
     }
@@ -93,7 +91,7 @@ public class JsonUtils {
         try {
             return objectMapper.readValue(content, valueTypeRef);
         } catch (Exception e) {
-            log.error("Object To Json error", e);
+            JqLog.error("Object To Json error", e);
             return null;
         }
     }
@@ -114,7 +112,7 @@ public class JsonUtils {
             JavaType javaType = objectMapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);
             return objectMapper.readValue(content, javaType);
         } catch (Exception e) {
-            log.error("Object To Json error", e);
+            JqLog.error("Object To Json error", e);
             return null;
         }
     }

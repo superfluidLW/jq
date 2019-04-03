@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
-@Slf4j
 public class JqParser {
     private static List<DateTimeFormatter> sdfs = Arrays.asList(DateTimeFormatter.ofPattern("yyyyMMdd"),
             DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -25,7 +24,7 @@ public class JqParser {
             }
         }
 
-        log.warn("Convert string {} to LocalDate failed.", dateStr);
+        JqLog.warn("Convert string {} to LocalDate failed.", dateStr);
         return null;
     }
 

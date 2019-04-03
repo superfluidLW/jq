@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Data
 public class TableWithHeader {
     private List<String> headers = new ArrayList<>();
@@ -55,7 +54,7 @@ public class TableWithHeader {
         for(int i = 0; i < rows.size(); ++i){
             String tradeTypeStr = rows.get(i).get(tradeTypeCol);
             if(StringUtils.isEmpty(tradeTypeStr)){
-                log.warn("Trade type string value is not found in {}th row.", i);
+                JqLog.warn("Trade type string value is not found in {}th row.", i);
                 continue;
             }
             TradeType tradeType = JqParser.enumFromStr(tradeTypeStr, TradeType.class);
@@ -83,7 +82,7 @@ public class TableWithHeader {
         try {
             ctor = T.getConstructor();
         } catch (Exception ex) {
-            log.warn("Class {} does not have a parameter-less constructor", T.getName());
+            JqLog.warn("Class {} does not have a parameter-less constructor", T.getName());
             return null;
         }
 
@@ -97,7 +96,7 @@ public class TableWithHeader {
         try {
             object = ctor.newInstance();
         } catch (Exception ex) {
-            log.warn("Failed to create an empty instance of class {}", T.getName());
+            JqLog.warn("Failed to create an empty instance of class {}", T.getName());
             return null;
         }
         for (int i = 0; i < headers.size(); i++) {
@@ -137,14 +136,14 @@ public class TableWithHeader {
                 value = JqParser.enumFromStr(val, OptionDirection.class);
             }
             else {
-                log.warn("Type {} is not recognized when converting table with header to internal objects");
+                JqLog.warn("Type {} is not recognized when converting table with header to internal objects");
                 return;
             }
 
             field.set(object, value);
         }
         catch (Exception ex){
-            log.warn("Set value {} of field {} failed.", val, field);
+            JqLog.warn("Set value {} of field {} failed.", val, field);
         }
     }
  }

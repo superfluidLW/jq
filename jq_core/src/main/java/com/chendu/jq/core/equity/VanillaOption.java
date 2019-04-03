@@ -4,7 +4,6 @@ import com.chendu.jq.core.common.JqCashflow;
 import com.chendu.jq.core.common.JqResult;
 import com.chendu.jq.core.common.jqEnum.ValuationModel;
 import com.chendu.jq.core.common.jqInterface.IDayCount;
-import com.chendu.jq.core.equity.calculator.analytical.EuropeanVanillaCalculator;
 import com.chendu.jq.core.market.JqMarket;
 import lombok.Data;
 
@@ -35,7 +34,7 @@ public class VanillaOption extends Option {
 
     @Override
     public List<JqCashflow> getCashflow(JqMarket jqMarket) {
-        double price = jqMarket.getQuote().get(underlyingAssetSymbol);
+        double price = jqMarket.getQuoteMap().get(underlyingAssetSymbol);
         return null;
     }
 
