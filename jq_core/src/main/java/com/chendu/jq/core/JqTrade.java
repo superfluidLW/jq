@@ -23,8 +23,10 @@ public abstract class JqTrade implements Serializable {
     public TradeType tradeType;
     public LocalDate startDate;
     public LocalDate maturityDate;
+    public Double notional;
     public Currency domCurrency;
     public Currency fgnCurrency;
+
 
     public JqTrade(){
 

@@ -6,6 +6,7 @@ public enum   TradeLabel {
     TradeType("产品类型"),
     StartDate("开始日期"),
     MaturityDate("到期日期"),
+    Notional("名义面额"),
     UnderlyingAssetSymbol("标的资产编码"),
     ValuationModel("估值方法"),
     Strike("行权价格"),

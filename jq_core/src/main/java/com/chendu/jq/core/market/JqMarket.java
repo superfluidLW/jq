@@ -17,6 +17,7 @@ public class JqMarket implements Serializable {
 
     private LocalDate mktDate;
     private Map<Currency, YieldCurve> yieldCurveMap;
+    private Map<JqSymbol, YieldCurve> dividendCurveMap;
     private Map<JqSymbol, Double> quoteMap;
     private Map<JqSymbol, Double> volatilityMap;
 }
