@@ -25,5 +25,5 @@ public class JqMarket implements Serializable {
         return tickerMap.get(ticker).getPrice();
     }
 
-    
+
 }

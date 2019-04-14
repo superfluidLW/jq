@@ -35,6 +35,3 @@ yarn-error.log*
 .idea
 *.log
 **/target/
-/taxchina_client/yarn.lock
-/taxchina_client/pack
-/taxchina_client/.vscode
