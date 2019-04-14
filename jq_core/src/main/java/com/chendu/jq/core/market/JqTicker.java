@@ -9,15 +9,15 @@ import java.io.Serializable;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-public class JqSymbol implements Serializable {
-    private String symbol;
+public class JqTicker implements Serializable {
+    private String id;
     private Venue venue;
 
-    public JqSymbol(){
+    public JqTicker(){
 
     }
 
-    public JqSymbol(String symbol){
-        this.symbol = symbol;
+    public JqTicker(String id){
+        this.id = id;
     }
 }

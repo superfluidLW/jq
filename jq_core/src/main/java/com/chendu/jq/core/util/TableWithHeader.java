@@ -4,7 +4,7 @@ import com.chendu.jq.core.JqTrade;
 import com.chendu.jq.core.common.jqEnum.*;
 import com.chendu.jq.core.common.jqInterface.IDayCount;
 import com.chendu.jq.core.equity.VanillaOption;
-import com.chendu.jq.core.market.JqSymbol;
+import com.chendu.jq.core.market.JqTicker;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -134,8 +134,8 @@ public class TableWithHeader {
                 }
                 value = dates;
             }
-            else if(genericType.equals(JqSymbol.class)){
-                value = new JqSymbol(val);
+            else if(genericType.equals(JqTicker.class)){
+                value = new JqTicker(val);
             }
             else if(genericType.equals(TradeType.class)){
                 value = JqParser.enumFromStr(val, TradeType.class);

@@ -1,4 +1,4 @@
-package com.chendu.jq.core.yieldCurve;
+package com.chendu.jq.core.market.mktObj;
 
 //to implement later
 public class YieldCurve {

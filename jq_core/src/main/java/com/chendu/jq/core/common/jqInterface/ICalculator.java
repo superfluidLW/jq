@@ -5,5 +5,5 @@ import com.chendu.jq.core.common.JqResult;
 import com.chendu.jq.core.market.JqMarket;
 
 public interface ICalculator {
-    JqResult calculate(JqTrade trade, JqMarket jqMarket);
+    JqResult calc(JqTrade trade, JqMarket jqMarket);
 }

@@ -34,7 +34,7 @@ public class VanillaOption extends Option {
 
     @Override
     public List<JqCashflow> getCashflow(JqMarket jqMarket) {
-        double price = jqMarket.getQuoteMap().get(underlyingAssetSymbol);
+        double price = jqMarket.getTickerMap().get(underlyingTicker).getPrice();
         return null;
     }
 
