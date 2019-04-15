@@ -4,7 +4,7 @@ import com.chendu.jq.core.JqTrade;
 import com.chendu.jq.core.common.jqEnum.*;
 import com.chendu.jq.core.common.jqInterface.IDayCount;
 import com.chendu.jq.core.equity.VanillaOption;
-import com.chendu.jq.core.market.JqTicker;
+import com.chendu.jq.core.market.mktObj.JqTicker;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;

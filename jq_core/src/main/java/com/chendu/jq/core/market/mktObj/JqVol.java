@@ -1,11 +1,15 @@
 package com.chendu.jq.core.market.mktObj;
 
-import com.chendu.jq.core.common.jqInterface.IMktObj;
+import com.chendu.jq.core.market.BumpableMktObj;
 import lombok.Data;
 
 @Data
-public class Volatility implements IMktObj {
+public class JqVol extends BumpableMktObj {
     private Double vol;
+
+    public JqVol(Double vol){
+        this.vol = vol;
+    }
 
     @Override
     public Double bumpUp() {
