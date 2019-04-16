@@ -25,7 +25,7 @@ public abstract class Option extends JqTrade {
     }
 
     public List<MktAction> bumpSpot(Double bump){
-        return Arrays.asList(new MktAction(JqMarket::getTickerMap, underlyingTicker, bump));
+        return Arrays.asList(new MktAction(JqMarket.tickerField(), underlyingTicker, bump));
     }
 
     protected abstract List<JqCashflow> calcPayoff();

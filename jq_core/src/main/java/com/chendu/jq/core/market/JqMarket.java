@@ -1,44 +1,89 @@
 package com.chendu.jq.core.market;
 
 import com.chendu.jq.core.common.jqEnum.Currency;
+import com.chendu.jq.core.market.mktObj.JqCurve;
 import com.chendu.jq.core.market.mktObj.JqTicker;
 import com.chendu.jq.core.market.mktObj.JqTickerInfo;
 import com.chendu.jq.core.market.mktObj.JqVol;
-import com.chendu.jq.core.market.mktObj.JqCurve;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Data
 public class JqMarket implements Serializable {
-    private LocalDate mktDate;
-    private Map<Currency, JqCurve> yieldCurveMap;
-    private Map<JqTicker, JqCurve> dividendCurveMap;
-    private Map<JqTicker, JqTickerInfo> tickerMap;
-    private Map<JqTicker, JqVol> volatilityMap;
+    public LocalDate mktDate;
+    public Map<Currency, JqCurve> yieldCurveMap = new HashMap<>();
+    public Map<JqTicker, JqCurve> dividendCurveMap = new HashMap<>();
+    public Map<JqTicker, JqTickerInfo> tickerMap = new HashMap<>();
+    public Map<JqTicker, JqVol> volatilityMap = new HashMap<>();
 
-    private Map<Function<JqMarket, Object>, Map<MktObj, MktAction>> actions;
+    public Map<String, Map<MktObj, MktAction>> actions = new HashMap<>();
 
     public Double tickerPrice(JqTicker ticker) {
-        return tickerMap.get(ticker).getPrice();
+        Double price = tickerMap.get(ticker).getPrice();
+        if(actions.containsKey("tickerMap")){
+            if(actions.get("tickerMap").containsKey(ticker)){
+                price += actions.get("tickerMap").get(ticker).bumpValue;
+            }
+        }
+        return price;
     }
 
     public void updateActions(List<MktAction> newActions) {
-        Map<Function<JqMarket, Object>, List<MktAction>> groups = newActions.stream().collect(Collectors.groupingBy(e -> e.func));
+        Map<String, List<MktAction>> groups = newActions.stream().collect(Collectors.groupingBy(e -> e.jqMktField.getName()));
         actions = new HashMap<>();
-        for (Function<JqMarket, Object> func : groups.keySet()
+        for (String field : groups.keySet()
                 ) {
-            actions.put(func, new HashMap<>());
-            for (MktAction mktAction : groups.get(func)) {
-                actions.get(func).put(mktAction.mktObj, mktAction);
+            actions.put(field, new HashMap<>());
+            for (MktAction mktAction : groups.get(field)) {
+                actions.get(field).put(mktAction.jqMktObj, mktAction);
             }
+        }
+    }
+
+    public static Field tickerField(){
+        try {
+            return JqMarket.class.getField("tickerMap");
+        }
+        catch (Exception ex){
+            System.out.println("Get field failed!");
+            return null;
+        }
+    }
+
+    public static Field yieldCurveField(){
+        try {
+            return JqMarket.class.getField("yieldCurveMap");
+        }
+        catch (Exception ex){
+            System.out.println("Get field failed!");
+            return null;
+        }
+    }
+
+    public static Field dividendCurveField(){
+        try {
+            return JqMarket.class.getField("dividendCurveMap");
+        }
+        catch (Exception ex){
+            System.out.println("Get field failed!");
+            return null;
+        }
+    }
+
+    public static Field volatilityField(){
+        try {
+            return JqMarket.class.getField("volatilityMap");
+        }
+        catch (Exception ex){
+            System.out.println("Get field failed!");
+            return null;
         }
     }
 }

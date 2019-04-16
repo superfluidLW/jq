@@ -1,9 +1,9 @@
 package com.chendu.jq.core.market.mktObj;
 
-import com.chendu.jq.core.market.BumpableMktObj;
+import com.chendu.jq.core.market.MktObj;
 
 //to implement later
-public class JqCurve extends BumpableMktObj {
+public class JqCurve extends MktObj {
 
     private Double constR;
 
@@ -13,15 +13,5 @@ public class JqCurve extends BumpableMktObj {
 
     public double getDf(Double t){
         return Math.exp(-constR*t);
-    }
-
-    @Override
-    protected Double bumpUp() {
-        return null;
-    }
-
-    @Override
-    protected Double bumpDown() {
-        return null;
     }
 }

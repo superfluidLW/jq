@@ -16,7 +16,7 @@ public class JqLog {
     private static String formalize(String base, Object ...objs){
         String result = base;
         for(Object o:objs)
-            base.replaceFirst("\\{}", o.toString());
+            result = result.replaceFirst("\\{}", o.toString());
         return result;
     }
 }

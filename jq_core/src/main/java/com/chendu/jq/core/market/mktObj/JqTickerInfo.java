@@ -1,23 +1,13 @@
 package com.chendu.jq.core.market.mktObj;
 
-import com.chendu.jq.core.market.BumpableMktObj;
+import com.chendu.jq.core.market.MktObj;
 import lombok.Data;
 
 @Data
-public class JqTickerInfo extends BumpableMktObj {
+public class JqTickerInfo extends MktObj {
     private Double price;
 
     public JqTickerInfo(Double price){
         this.price = price;
-    }
-
-    @Override
-    public Double bumpUp() {
-        return price + 0.01;
-    }
-
-    @Override
-    public Double bumpDown() {
-        return price - 0.01;
     }
 }

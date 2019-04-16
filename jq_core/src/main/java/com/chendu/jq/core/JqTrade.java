@@ -47,11 +47,11 @@ public abstract class JqTrade implements Serializable {
              ) {
             try{
                 if(JqParser.enumFromStr(field.getName(), TradeLabel.class) == null){
-                    JqLog.warn("Not a valid trade label", field.getName());
+                    JqLog.warn("Not a valid trade label {}", field.getName());
                 }
             }
             catch (Exception ex){
-                JqLog.error("Not a valid trade label", field.getName());
+                JqLog.error("Not a valid trade label {}", field.getName());
                 return false;
             }
         }

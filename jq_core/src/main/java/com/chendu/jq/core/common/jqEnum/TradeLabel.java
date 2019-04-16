@@ -7,7 +7,7 @@ public enum   TradeLabel {
     StartDate("开始日期"),
     MaturityDate("到期日期"),
     Notional("名义面额"),
-    UnderlyingAssetSymbol("标的资产编码"),
+    UnderlyingTicker("标的资产编码"),
     ValuationModel("估值方法"),
     Strike("行权价格"),
     DayCount("计息基准"),

@@ -1,17 +1,17 @@
 package com.chendu.jq.core.market;
 
-import java.util.function.Function;
+import java.lang.reflect.Field;
 
 public class MktAction {
-    public Function<JqMarket, Object> func;
-    public MktObj mktObj;
+    public Field jqMktField;
+    public MktObj jqMktObj;
     public Double bumpValue;
 
-    public MktAction(Function<JqMarket, Object> func,
+    public MktAction(Field field,
                      MktObj mktObj,
                      Double bumpValue){
-        this.func = func;
-        this.mktObj = mktObj;
+        this.jqMktField = field;
+        this.jqMktObj = mktObj;
         this.bumpValue = bumpValue;
     }
 }
