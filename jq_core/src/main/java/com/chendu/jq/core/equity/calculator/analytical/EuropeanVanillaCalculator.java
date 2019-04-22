@@ -22,13 +22,13 @@ public class EuropeanVanillaCalculator extends OptionCalculator {
         Double exerciseTime = vanillaOption.getDayCount().yearFraction(jqMarket.getMktDate(), exerciseDate);
         Double maturityTime = vanillaOption.getDayCount().yearFraction(jqMarket.getMktDate(), maturityDate);
 
-        Double dfAtExercise = jqMarket.getYieldCurveMap().get(vanillaOption.getDomCurrency()).getDf(exerciseTime);
+        Double dfAtExercise = jqMarket.jqCurve(vanillaOption.getDomCurrency()).getDf(exerciseTime);
         Double dividendDfAtExercise = jqMarket.getDividendCurveMap().get(vanillaOption.getUnderlyingTicker()).getDf(exerciseTime);
 
-        Double dfAtMaturity = jqMarket.getYieldCurveMap().get(vanillaOption.getDomCurrency()).getDf(maturityTime);
+        Double dfAtMaturity = jqMarket.jqCurve(vanillaOption.getDomCurrency()).getDf(maturityTime);
         Double dfExercise2Maturity = dfAtMaturity / dfAtExercise;
 
-        Double vol = jqMarket.tickerPrice(vanillaOption.getUnderlyingTicker());
+        Double vol = jqMarket.tickerVol(vanillaOption.getUnderlyingTicker());
         Double s0 = jqMarket.tickerPrice(vanillaOption.getUnderlyingTicker());
         Double f = s0 * dividendDfAtExercise / dfAtExercise;
 

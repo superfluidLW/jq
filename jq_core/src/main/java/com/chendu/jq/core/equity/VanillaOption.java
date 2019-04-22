@@ -5,6 +5,7 @@ import com.chendu.jq.core.common.JqResult;
 import com.chendu.jq.core.common.jqEnum.ValuationModel;
 import com.chendu.jq.core.common.jqInterface.IDayCount;
 import com.chendu.jq.core.market.JqMarket;
+import com.chendu.jq.core.util.JsonUtils;
 import lombok.Data;
 
 import java.util.List;
@@ -16,6 +17,13 @@ public class VanillaOption extends Option {
 
     public VanillaOption(){
         super();
+    }
+
+    @Override
+    public Option bumpMaturity(int offset) {
+        VanillaOption vo = JsonUtils.readValue(JsonUtils.writeValueAsString(this), VanillaOption.class);
+        vo.setMaturityDate(this.maturityDate.plusDays(offset));
+        return vo;
     }
 
     @Override

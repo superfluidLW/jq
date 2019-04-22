@@ -1,13 +1,12 @@
 package com.chendu.jq.core.equity.calculator.mc;
 
 import com.chendu.jq.core.JqTrade;
-import com.chendu.jq.core.common.JqResult;
-import com.chendu.jq.core.common.jqInterface.ICalculator;
+import com.chendu.jq.core.equity.calculator.OptionCalculator;
 import com.chendu.jq.core.market.JqMarket;
 
-public class MonteCarloCalculator implements ICalculator {
+public class MonteCarloCalculator extends OptionCalculator {
     @Override
-    public JqResult calc(JqTrade trade, JqMarket jqMarket) {
+    public Double calcPv(JqTrade trade, JqMarket jqMarket) {
         return null;
     }
 }

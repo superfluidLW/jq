@@ -4,14 +4,14 @@ import java.lang.reflect.Field;
 
 public class MktAction {
     public Field jqMktField;
-    public MktObj jqMktObj;
+    public Object mktObj;
     public Double bumpValue;
 
     public MktAction(Field field,
-                     MktObj mktObj,
+                     Object mktObj,
                      Double bumpValue){
         this.jqMktField = field;
-        this.jqMktObj = mktObj;
+        this.mktObj = mktObj;
         this.bumpValue = bumpValue;
     }
 }

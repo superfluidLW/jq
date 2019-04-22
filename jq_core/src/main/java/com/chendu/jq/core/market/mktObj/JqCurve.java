@@ -11,6 +11,10 @@ public class JqCurve extends MktObj {
         this.constR = constR;
     }
 
+    public JqCurve bump(double shift){
+        return new JqCurve(constR+shift);
+    }
+
     public double getDf(Double t){
         return Math.exp(-constR*t);
     }

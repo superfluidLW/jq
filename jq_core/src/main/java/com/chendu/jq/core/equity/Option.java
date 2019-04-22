@@ -24,8 +24,18 @@ public abstract class Option extends JqTrade {
         super();
     }
 
+    public abstract Option bumpMaturity(int offset);
+
     public List<MktAction> bumpSpot(Double bump){
         return Arrays.asList(new MktAction(JqMarket.tickerField(), underlyingTicker, bump));
+    }
+
+    public List<MktAction> bumpVol(Double bump){
+        return Arrays.asList(new MktAction(JqMarket.volatilityField(), underlyingTicker, bump));
+    }
+
+    public List<MktAction> bumpYieldCurve(Double bump){
+        return Arrays.asList(new MktAction(JqMarket.yieldCurveField(), domCurrency, bump));
     }
 
     protected abstract List<JqCashflow> calcPayoff();

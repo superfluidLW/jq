@@ -23,7 +23,27 @@ public class JqMarket implements Serializable {
     public Map<JqTicker, JqTickerInfo> tickerMap = new HashMap<>();
     public Map<JqTicker, JqVol> volatilityMap = new HashMap<>();
 
-    public Map<String, Map<MktObj, MktAction>> actions = new HashMap<>();
+    public Map<String, Map<Object, MktAction>> actions = new HashMap<>();
+
+    public JqCurve jqCurve(Currency currency){
+        JqCurve jqCurve = yieldCurveMap.get(currency);
+        if(actions.containsKey("yieldCurveMap")){
+            if(actions.get("yieldCurveMap").containsKey(currency)){
+                return jqCurve.bump(actions.get("volatilityMap").get(currency).bumpValue);
+            }
+        }
+        return jqCurve;
+    }
+
+    public Double tickerVol(JqTicker ticker){
+        Double vol = volatilityMap.get(ticker).getVol();
+        if(actions.containsKey("volatilityMap")){
+            if(actions.get("volatilityMap").containsKey(ticker)){
+                vol += actions.get("volatilityMap").get(ticker).bumpValue;
+            }
+        }
+        return vol;
+    }
 
     public Double tickerPrice(JqTicker ticker) {
         Double price = tickerMap.get(ticker).getPrice();
@@ -42,7 +62,7 @@ public class JqMarket implements Serializable {
                 ) {
             actions.put(field, new HashMap<>());
             for (MktAction mktAction : groups.get(field)) {
-                actions.get(field).put(mktAction.jqMktObj, mktAction);
+                actions.get(field).put(mktAction.mktObj, mktAction);
             }
         }
     }
@@ -60,16 +80,6 @@ public class JqMarket implements Serializable {
     public static Field yieldCurveField(){
         try {
             return JqMarket.class.getField("yieldCurveMap");
-        }
-        catch (Exception ex){
-            System.out.println("Get field failed!");
-            return null;
-        }
-    }
-
-    public static Field dividendCurveField(){
-        try {
-            return JqMarket.class.getField("dividendCurveMap");
         }
         catch (Exception ex){
             System.out.println("Get field failed!");
