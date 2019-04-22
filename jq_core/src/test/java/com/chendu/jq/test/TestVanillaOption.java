@@ -10,6 +10,7 @@ import com.chendu.jq.core.market.mktObj.JqCurve;
 import com.chendu.jq.core.market.mktObj.JqTicker;
 import com.chendu.jq.core.market.mktObj.JqTickerInfo;
 import com.chendu.jq.core.market.mktObj.JqVol;
+import com.chendu.jq.core.util.JsonUtils;
 import com.chendu.jq.core.util.TableWithHeader;
 import org.junit.Test;
 
@@ -57,6 +58,7 @@ public class TestVanillaOption {
 
         EuropeanVanillaCalculator calculator = new EuropeanVanillaCalculator();
         JqResult jqResult = calculator.calc(vanillaOption, jqMarket);
+        System.out.println(JsonUtils.writeValueAsString(jqResult));
     }
 
     @Test

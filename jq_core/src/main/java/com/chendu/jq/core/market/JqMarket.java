@@ -29,7 +29,7 @@ public class JqMarket implements Serializable {
         JqCurve jqCurve = yieldCurveMap.get(currency);
         if(actions.containsKey("yieldCurveMap")){
             if(actions.get("yieldCurveMap").containsKey(currency)){
-                return jqCurve.bump(actions.get("volatilityMap").get(currency).bumpValue);
+                return jqCurve.bump(actions.get("yieldCurveMap").get(currency).bumpValue);
             }
         }
         return jqCurve;

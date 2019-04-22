@@ -2,11 +2,11 @@ package com.chendu.jq.core.common.jqEnum;
 
 import com.chendu.jq.core.common.dayCount.Act360;
 import com.chendu.jq.core.common.dayCount.Act365;
-import com.chendu.jq.core.common.jqInterface.IDayCount;
+import com.chendu.jq.core.common.dayCount.DayCount;
 import com.chendu.jq.core.util.JqParser;
 import lombok.Getter;
 
-public enum DayCount {
+public enum DayCountType {
     Act360("Act360"),
     Act365("Act365"),
     ActAct("ActAct");
@@ -14,12 +14,12 @@ public enum DayCount {
     @Getter
     private String nameCn;
 
-    DayCount(String nameCn){
+    DayCountType(String nameCn){
         this.nameCn = nameCn;
     }
 
-    public static IDayCount impl(String dayCount){
-        DayCount dc = JqParser.enumFromStr(dayCount, DayCount.class);
+    public static DayCount impl(String dayCount){
+        DayCountType dc = JqParser.enumFromStr(dayCount, DayCountType.class);
         switch (dc) {
             case Act360:
                 return new Act360();

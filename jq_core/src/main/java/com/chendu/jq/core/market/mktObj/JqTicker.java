@@ -11,7 +11,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 public class JqTicker extends MktObj implements Serializable {
-    private Venue venue;
+    private Venue venue = Venue.ShExg;
 
     public JqTicker(){
 
@@ -27,11 +27,11 @@ public class JqTicker extends MktObj implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         JqTicker that = (JqTicker) o;
-        return id == that.id;
+        return id .equals(that.id) && venue.equals(that.venue);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, venue);
     }
 }

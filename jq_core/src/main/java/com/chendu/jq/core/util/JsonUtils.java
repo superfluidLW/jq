@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -24,6 +25,7 @@ public class JsonUtils {
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .configure(SerializationFeature.WRITE_BIGDECIMAL_AS_PLAIN, true)
                 .getSerializerProvider();
+        objectMapper.registerModule(new JavaTimeModule());
     }
 
 
@@ -82,7 +84,7 @@ public class JsonUtils {
         try {
             return objectMapper.readValue(content, valueType);
         } catch (IOException e) {
-            JqLog.error("Json To Object error", e);
+            JqLog.error("Json To Object error {}", e);
             return null;
         }
     }
@@ -91,7 +93,7 @@ public class JsonUtils {
         try {
             return objectMapper.readValue(content, valueTypeRef);
         } catch (Exception e) {
-            JqLog.error("Object To Json error", e);
+            JqLog.error("Object To Json error {}", e);
             return null;
         }
     }

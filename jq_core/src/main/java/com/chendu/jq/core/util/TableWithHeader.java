@@ -1,8 +1,8 @@
 package com.chendu.jq.core.util;
 
 import com.chendu.jq.core.JqTrade;
+import com.chendu.jq.core.common.dayCount.DayCount;
 import com.chendu.jq.core.common.jqEnum.*;
-import com.chendu.jq.core.common.jqInterface.IDayCount;
 import com.chendu.jq.core.equity.VanillaOption;
 import com.chendu.jq.core.market.mktObj.JqTicker;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -140,8 +140,8 @@ public class TableWithHeader {
             else if(genericType.equals(TradeType.class)){
                 value = JqParser.enumFromStr(val, TradeType.class);
             }
-            else if(genericType.equals(IDayCount.class)){
-                value = DayCount.impl(val);
+            else if(genericType.equals(DayCount.class)){
+                value = DayCountType.impl(val);
             }
             else if(genericType.equals(ValuationModel.class)){
                 value = JqParser.enumFromStr(val, ValuationModel.class);
