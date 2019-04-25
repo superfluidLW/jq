@@ -2,12 +2,16 @@ package com.chendu.jq.core;
 
 import com.chendu.jq.core.common.JqCashflow;
 import com.chendu.jq.core.common.JqResult;
+import com.chendu.jq.core.common.dayCount.DayCount;
 import com.chendu.jq.core.common.jqEnum.Currency;
 import com.chendu.jq.core.common.jqEnum.TradeLabel;
 import com.chendu.jq.core.common.jqEnum.TradeType;
 import com.chendu.jq.core.market.JqMarket;
 import com.chendu.jq.core.util.JqLog;
 import com.chendu.jq.core.util.JqParser;
+import com.chendu.jq.core.util.JqTradeLabelSeq;
+import com.chendu.jq.core.util.JsonUtils;
+import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -24,9 +28,9 @@ public abstract class JqTrade implements Serializable {
     public LocalDate startDate;
     public LocalDate maturityDate;
     public Double notional;
+    public DayCount dayCount;
     public Currency domCurrency;
     public Currency fgnCurrency;
-
 
     public JqTrade(){
 
@@ -61,9 +65,39 @@ public abstract class JqTrade implements Serializable {
 
     public abstract JqResult calc(JqMarket jqMarket);
 
-    public abstract List<JqCashflow> getCashflow(JqMarket jqMarket);
+    public abstract List<JqCashflow> cashflows(JqMarket jqMarket);
 
-    public List<JqCashflow> getReplicatingCashflow(JqMarket jqMarket){
-        return getCashflow(jqMarket);
+    public static String[][] templateTradeData(Class clazz, JqTrade trade ) {
+        Field[] fields = clazz.getFields();
+        Map<String, Field> fieldMap = Arrays.stream(fields).collect(Collectors.toMap(f -> f.getName().toLowerCase(), f -> f));
+        String[][] template = new String[fields.length][2];
+        int i = 0;
+
+        for (String tradelabel:JqTradeLabelSeq.tradeLabelSeq){
+            if(fieldMap.containsKey(tradelabel.toLowerCase())){
+                template[i][0] = tradelabel;
+                try {
+                    Object value = fieldMap.get(tradelabel.toLowerCase()).get(trade);
+                    Field field = fieldMap.get(tradelabel.toLowerCase());
+                    String strVal;
+                    if(field.getGenericType().equals(LocalDate.class)){
+                        strVal = JqParser.jqDateToStr((LocalDate) value);
+                    }
+                    else if(field.getGenericType().equals(new TypeReference<List<LocalDate>>(){}.getType())){
+                        strVal = JsonUtils.writeValueAsString(value).replace("\"", "");
+                    }
+                    else {
+                        strVal = value == null ? "" : value.toString();
+                    }
+
+                    template[i][1] = strVal;
+                }
+                catch (IllegalAccessException ex){
+                    JqLog.error("Failed to get value of trade label {}", tradelabel);
+                }
+            }
+            i ++;
+        }
+        return template;
     }
 }

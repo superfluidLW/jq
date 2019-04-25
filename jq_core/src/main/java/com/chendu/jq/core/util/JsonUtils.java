@@ -4,12 +4,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 public class JsonUtils {
@@ -18,7 +24,12 @@ public class JsonUtils {
     }
 
     private static ObjectMapper objectMapper = null;
-
+    /** 默认日期时间格式 */
+    public static final String DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    /** 默认日期格式 */
+    public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
+    /** 默认时间格式 */
+    public static final String DEFAULT_TIME_FORMAT = "HH:mm:ss";
     static {
         objectMapper = new ObjectMapper();
         objectMapper
@@ -26,6 +37,7 @@ public class JsonUtils {
                 .configure(SerializationFeature.WRITE_BIGDECIMAL_AS_PLAIN, true)
                 .getSerializerProvider();
         objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
     }
 
 
@@ -42,7 +54,6 @@ public class JsonUtils {
                     return String.valueOf(object);
                 } else {
                     objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-//            JqLog.info("type {} to json message {}", object == null ? "" : object.getClass().getSubName(), writeValueAsString2(object));
                     return objectMapper.writeValueAsString(object);
                 }
             }

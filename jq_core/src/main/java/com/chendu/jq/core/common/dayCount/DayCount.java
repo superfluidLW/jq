@@ -12,7 +12,13 @@ public class DayCount implements Serializable {
 
     }
     protected DayCountType dayCountType;
+
     public Double yearFraction(LocalDate startDate, LocalDate endDate){
         return 0.0;
+    }
+
+    @Override
+    public String toString(){
+        return dayCountType.toString();
     }
 }

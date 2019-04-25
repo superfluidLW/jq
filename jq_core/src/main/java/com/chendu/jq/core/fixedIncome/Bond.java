@@ -14,7 +14,7 @@ public class Bond extends JqTrade {
     }
 
     @Override
-    public List<JqCashflow> getCashflow(JqMarket jqMarket) {
+    public List<JqCashflow> cashflows(JqMarket jqMarket) {
         return null;
     }
 }

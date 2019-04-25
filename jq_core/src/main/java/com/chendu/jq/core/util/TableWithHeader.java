@@ -117,6 +117,9 @@ public class TableWithHeader {
     private void assignFieldValue(Object object, Field field, String val){
         Type genericType = field.getGenericType();
         Object value;
+        if(StringUtils.isEmpty(val)){
+            return;
+        }
         try {
             if (genericType.equals(Double.class)) {
                 value = Double.parseDouble(val);

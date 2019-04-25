@@ -15,6 +15,7 @@ import java.util.List;
 
 @Data
 public abstract class Option extends JqTrade {
+    public Double strike;
     public List<LocalDate> exerciseDates;
     public JqTicker underlyingTicker;
     public ValuationModel valuationModel;

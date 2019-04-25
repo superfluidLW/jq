@@ -1,7 +1,5 @@
 package com.chendu.jq.core.util;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -12,6 +10,10 @@ import java.util.List;
 public class JqParser {
     private static List<DateTimeFormatter> sdfs = Arrays.asList(DateTimeFormatter.ofPattern("yyyyMMdd"),
             DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+    public static String jqDateToStr(LocalDate localDate){
+        return sdfs.get(1).format(localDate);
+    }
 
     public static LocalDate jqDateFromStr(String dateStr){
         for (DateTimeFormatter sdf:sdfs

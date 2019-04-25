@@ -17,7 +17,7 @@ public class InterestRateSwap extends JqTrade {
     }
 
     @Override
-    public List<JqCashflow> getCashflow(JqMarket jqMarket) {
+    public List<JqCashflow> cashflows(JqMarket jqMarket) {
         return null;
     }
 }

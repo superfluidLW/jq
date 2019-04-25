@@ -1,5 +1,6 @@
 package com.chendu.jq.core.excel;
 
+import com.chendu.jq.core.equity.VanillaOption;
 import com.exceljava.jinx.ExcelAddIn;
 import com.exceljava.jinx.ExcelFunction;
 import com.exceljava.jinx.ExcelMacro;
@@ -44,6 +45,15 @@ public class ReferenceData {
     public static String[][] getJqProps() {
         return JqProp.GetAllProps();
     }
+
+    @ExcelFunction(
+            value = "getTemplateTradeData",
+            isVolatile = true
+    )
+    public static String[][] getTemplateTradeData() {
+        return VanillaOption.templateTradeData();
+    }
+
 
     @ExcelMacro(
             value = "jinx.exampleMacro",

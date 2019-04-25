@@ -24,6 +24,11 @@ import java.util.List;
 
 public class TestVanillaOption {
     @Test
+    public void printTemplate(){
+        String[][] template = VanillaOption.templateTradeData();
+    }
+
+    @Test
     public void validateCalculation(){
         String[][] table = new String[2][];
         table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额"};

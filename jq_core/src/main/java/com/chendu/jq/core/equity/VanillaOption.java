@@ -1,22 +1,29 @@
 package com.chendu.jq.core.equity;
 
+import com.chendu.jq.core.JqTrade;
 import com.chendu.jq.core.common.JqCashflow;
 import com.chendu.jq.core.common.JqResult;
-import com.chendu.jq.core.common.dayCount.DayCount;
+import com.chendu.jq.core.common.dayCount.Act360;
+import com.chendu.jq.core.common.jqEnum.Currency;
+import com.chendu.jq.core.common.jqEnum.OptionDirection;
+import com.chendu.jq.core.common.jqEnum.TradeType;
 import com.chendu.jq.core.common.jqEnum.ValuationModel;
 import com.chendu.jq.core.market.JqMarket;
+import com.chendu.jq.core.market.mktObj.JqTicker;
 import com.chendu.jq.core.util.JsonUtils;
 import lombok.Data;
 
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 @Data
 public class VanillaOption extends Option {
-    public Double strike;
-    public DayCount dayCount;
+
 
     public VanillaOption(){
         super();
+        tradeType = TradeType.VanillaOption;
     }
 
     @Override
@@ -41,9 +48,24 @@ public class VanillaOption extends Option {
     }
 
     @Override
-    public List<JqCashflow> getCashflow(JqMarket jqMarket) {
+    public List<JqCashflow> cashflows(JqMarket jqMarket) {
         double price = jqMarket.getTickerMap().get(underlyingTicker).getPrice();
         return null;
+    }
+
+    public static String[][] templateTradeData() {
+        VanillaOption vanillaOption = new VanillaOption();
+        vanillaOption.setStartDate(LocalDate.now());
+        vanillaOption.setMaturityDate(LocalDate.now().plusYears(1));
+        vanillaOption.setExerciseDates(Arrays.asList(LocalDate.now().plusYears(1)));
+        vanillaOption.setStrike(1000.0);
+        vanillaOption.setOptionDirection(OptionDirection.Call);
+        vanillaOption.setUnderlyingTicker(new JqTicker("SH000300"));
+        vanillaOption.setDayCount(new Act360());
+        vanillaOption.setNotional(1.0);
+        vanillaOption.setDomCurrency(Currency.Cny);
+        vanillaOption.setValuationModel(ValuationModel.Analytical);
+        return JqTrade.templateTradeData(VanillaOption.class, vanillaOption);
     }
 
     @Override
