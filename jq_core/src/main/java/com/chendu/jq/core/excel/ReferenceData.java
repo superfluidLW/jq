@@ -1,11 +1,17 @@
 package com.chendu.jq.core.excel;
 
+import com.chendu.jq.core.equity.DigitalOption;
 import com.chendu.jq.core.equity.VanillaOption;
 import com.exceljava.jinx.ExcelAddIn;
 import com.exceljava.jinx.ExcelFunction;
 import com.exceljava.jinx.ExcelMacro;
 
 import javax.swing.*;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class ReferenceData {
     private final ExcelAddIn xl;
@@ -51,18 +57,30 @@ public class ReferenceData {
             isVolatile = true
     )
     public static String[][] getTemplateTradeData() {
-        return VanillaOption.templateTradeData();
-    }
+        List<Class> classes = Arrays.asList(VanillaOption.class, DigitalOption.class);
+        List<String[][]> templates = new ArrayList<>();
+        int maxRow = 0;
+        for(int i = 0; i < classes.size(); ++i){
+            try {
+                Method method = classes.get(i).getMethod("templateTradeData", null);
+                String[][] template = (String[][])method.invoke(null, null);
+                templates.add(template);
+                if(template.length > maxRow){
+                    maxRow = template.length;
+                }
+            }
+            catch (Exception ex){
 
+            }
+        }
 
-    @ExcelMacro(
-            value = "jinx.exampleMacro",
-            shortcut = "Ctrl+Alt+J"
-    )
-    public static void macroExample() {
-        JOptionPane.showMessageDialog(null,
-                "Macro!",
-                "Macro called",
-                JOptionPane.INFORMATION_MESSAGE);
+        String[][] result = new String[maxRow][2*classes.size()];
+        for(int i = 0; i < templates.size(); ++i)
+            for(int j = 0; j < templates.get(i).length; ++j)
+                for(int k = 0; k < templates.get(i)[0].length; ++k) {
+                    result[j][2*i+k] = templates.get(i)[j][k];
+                }
+
+        return result;
     }
 }

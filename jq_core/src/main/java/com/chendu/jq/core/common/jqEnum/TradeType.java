@@ -4,6 +4,7 @@ import lombok.Getter;
 
 public enum TradeType {
     VanillaOption("香草期权"),
+    DigitalOption("二值期权"),
     AsianOption("亚式期权"),
     DoubleBarrierOption("双障碍期权"),
     KnockOutOption("敲出期权"),

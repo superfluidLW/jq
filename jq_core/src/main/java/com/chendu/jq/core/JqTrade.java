@@ -7,10 +7,8 @@ import com.chendu.jq.core.common.jqEnum.Currency;
 import com.chendu.jq.core.common.jqEnum.TradeLabel;
 import com.chendu.jq.core.common.jqEnum.TradeType;
 import com.chendu.jq.core.market.JqMarket;
-import com.chendu.jq.core.util.JqLog;
-import com.chendu.jq.core.util.JqParser;
-import com.chendu.jq.core.util.JqTradeLabelSeq;
-import com.chendu.jq.core.util.JsonUtils;
+import com.chendu.jq.core.market.mktObj.JqCurve;
+import com.chendu.jq.core.util.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Data;
 
@@ -84,7 +82,14 @@ public abstract class JqTrade implements Serializable {
                         strVal = JqParser.jqDateToStr((LocalDate) value);
                     }
                     else if(field.getGenericType().equals(new TypeReference<List<LocalDate>>(){}.getType())){
-                        strVal = JsonUtils.writeValueAsString(value).replace("\"", "");
+                        strVal = "";
+                        List<LocalDate> listDates = (List<LocalDate>)value;
+                        for (int j = 0; j < listDates.size(); j++) {
+                            strVal += JqParser.jqDateToStr(listDates.get(j));
+                            if(j < listDates.size()-1){
+                                strVal += JqConstant.delim;
+                            }
+                        }
                     }
                     else {
                         strVal = value == null ? "" : value.toString();

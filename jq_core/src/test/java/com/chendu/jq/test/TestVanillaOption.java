@@ -5,6 +5,7 @@ import com.chendu.jq.core.common.JqResult;
 import com.chendu.jq.core.common.jqEnum.Currency;
 import com.chendu.jq.core.equity.VanillaOption;
 import com.chendu.jq.core.equity.calculator.analytical.EuropeanVanillaCalculator;
+import com.chendu.jq.core.excel.ReferenceData;
 import com.chendu.jq.core.market.JqMarket;
 import com.chendu.jq.core.market.mktObj.JqCurve;
 import com.chendu.jq.core.market.mktObj.JqTicker;
@@ -25,7 +26,8 @@ import java.util.List;
 public class TestVanillaOption {
     @Test
     public void printTemplate(){
-        String[][] template = VanillaOption.templateTradeData();
+        JqTicker jqTicker = new JqTicker("SH000300");
+        System.out.println(jqTicker.toString());
     }
 
     @Test

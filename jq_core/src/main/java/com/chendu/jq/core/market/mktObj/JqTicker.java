@@ -14,13 +14,11 @@ public class JqTicker extends MktObj implements Serializable {
     private Venue venue = Venue.ShExg;
 
     public JqTicker(){
-
     }
 
     public JqTicker(String id){
         this.id = id;
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -33,5 +31,10 @@ public class JqTicker extends MktObj implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id, venue);
+    }
+
+    @Override
+    public String toString(){
+        return id;
     }
 }
