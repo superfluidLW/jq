@@ -1,7 +1,11 @@
 package com.chendu.jq.core.excel;
 
+import com.chendu.jq.core.JqTrade;
+import com.chendu.jq.core.common.JqResult;
 import com.chendu.jq.core.equity.DigitalOption;
 import com.chendu.jq.core.equity.VanillaOption;
+import com.chendu.jq.core.market.JqMarket;
+import com.chendu.jq.core.util.TableWithHeader;
 import com.exceljava.jinx.ExcelAddIn;
 import com.exceljava.jinx.ExcelFunction;
 import com.exceljava.jinx.ExcelMacro;
@@ -13,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class ReferenceData {
+public class XlFunc {
     private final ExcelAddIn xl;
 
     /**
@@ -23,7 +27,7 @@ public class ReferenceData {
      *
      * @param xl ExcelAddIn object for calling back into Excel and Jinx
      */
-    public ReferenceData(ExcelAddIn xl) {
+    public XlFunc(ExcelAddIn xl) {
         this.xl = xl;
     }
 
@@ -80,6 +84,31 @@ public class ReferenceData {
                 for(int k = 0; k < templates.get(i)[0].length; ++k) {
                     result[j][2*i+k] = templates.get(i)[j][k];
                 }
+
+        return result;
+    }
+
+    @ExcelFunction(
+            value = "jqCalc",
+            isVolatile = true
+    )
+    public static String[][] jqCalc(String[][] labelValue, String[][] mktData) {
+        TableWithHeader twh = new TableWithHeader(transpose(labelValue));
+        JqTrade trade = twh.toTrades().get(0);
+        JqMarket mkt = XlUtil.toJqMarket(trade, mktData);
+
+        JqResult jqResult = trade.calc(mkt);
+        return jqResult.toStringArray();
+    }
+
+    public static String[][] transpose(String[][] matrix){
+        int row = matrix.length;
+        int col = matrix[0].length;
+
+        String[][] result = new String[col][row];
+        for(int i = 0; i < row; ++i)
+            for(int j = 0; j < col; ++j)
+                result[j][i] = matrix[i][j];
 
         return result;
     }

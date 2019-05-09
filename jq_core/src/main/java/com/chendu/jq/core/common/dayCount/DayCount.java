@@ -11,14 +11,25 @@ public class DayCount implements Serializable {
     public DayCount(){
 
     }
+
+    public DayCount(DayCountType dayCountType){
+        this.dayCountType = dayCountType;
+    }
+
     protected DayCountType dayCountType;
 
     public Double yearFraction(LocalDate startDate, LocalDate endDate){
-        return 0.0;
+        switch (dayCountType){
+            case Act360:
+                return Act360.yearFraction(startDate, endDate);
+            case Act365:
+            default:
+                return Act365.yearFraction(startDate, endDate);
+        }
     }
 
     @Override
     public String toString(){
-        return dayCountType.toString();
+        return dayCountType.name();
     }
 }

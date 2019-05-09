@@ -65,9 +65,8 @@ public class TableWithHeader {
                 case VanillaOption:
                     trade = toClass(VanillaOption.class, i);
                     break;
-                case AsianOption:
                 case RangeAccrual:
-                case KnockOutOption:
+                case DigitalOption:
                 case DoubleBarrierOption:
                     break;
             }

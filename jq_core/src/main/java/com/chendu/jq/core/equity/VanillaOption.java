@@ -4,10 +4,10 @@ import com.chendu.jq.core.JqTrade;
 import com.chendu.jq.core.common.JqCashflow;
 import com.chendu.jq.core.common.JqResult;
 import com.chendu.jq.core.common.dayCount.Act360;
-import com.chendu.jq.core.common.jqEnum.Currency;
-import com.chendu.jq.core.common.jqEnum.OptionDirection;
-import com.chendu.jq.core.common.jqEnum.TradeType;
-import com.chendu.jq.core.common.jqEnum.ValuationModel;
+import com.chendu.jq.core.common.dayCount.DayCount;
+import com.chendu.jq.core.common.jqEnum.*;
+import com.chendu.jq.core.equity.calculator.analytical.EuropeanDigitalCalculator;
+import com.chendu.jq.core.equity.calculator.analytical.EuropeanVanillaCalculator;
 import com.chendu.jq.core.market.JqMarket;
 import com.chendu.jq.core.market.mktObj.JqTicker;
 import com.chendu.jq.core.util.JsonUtils;
@@ -16,6 +16,7 @@ import lombok.Data;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class VanillaOption extends Option {
@@ -30,21 +31,19 @@ public class VanillaOption extends Option {
     public Option bumpMaturity(int offset) {
         VanillaOption vo = JsonUtils.readValue(JsonUtils.writeValueAsString(this), VanillaOption.class);
         vo.setMaturityDate(this.maturityDate.plusDays(offset));
+        vo.setExerciseDates(exerciseDates.stream().map(e -> e.plusDays(offset)).collect(Collectors.toList()));
         return vo;
     }
 
     @Override
     public JqResult calc(JqMarket jqMarket) {
-        JqResult jqResult = new JqResult();
-
-        if(valuationModel == ValuationModel.Analytical){
-
+        if(valuationModel == ValuationModel.MonteCarlo){
+            return new JqResult();
         }
-        else if(valuationModel == ValuationModel.MonteCarlo){
-
+        else{
+            EuropeanVanillaCalculator edc = new EuropeanVanillaCalculator();
+            return edc.calc(this, jqMarket);
         }
-
-        return jqResult;
     }
 
     @Override
@@ -61,7 +60,7 @@ public class VanillaOption extends Option {
         vanillaOption.setStrike(1000.0);
         vanillaOption.setOptionDirection(OptionDirection.Call);
         vanillaOption.setUnderlyingTicker(new JqTicker("SH000300"));
-        vanillaOption.setDayCount(new Act360());
+        vanillaOption.setDayCount(new DayCount(DayCountType.Act365));
         vanillaOption.setNotional(1.0);
         vanillaOption.setDomCurrency(Currency.Cny);
         vanillaOption.setValuationModel(ValuationModel.Analytical);

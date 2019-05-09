@@ -20,13 +20,6 @@ public enum DayCountType {
 
     public static DayCount impl(String dayCount){
         DayCountType dc = JqParser.enumFromStr(dayCount, DayCountType.class);
-        switch (dc) {
-            case Act360:
-                return new Act360();
-            case Act365:
-                return new Act365();
-            default:
-                return new Act365();
-        }
+        return new DayCount(dc);
     }
 }
