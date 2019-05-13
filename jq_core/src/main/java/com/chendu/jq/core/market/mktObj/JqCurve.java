@@ -18,4 +18,8 @@ public class JqCurve extends MktObj {
     public double getDf(Double t){
         return Math.exp(-constR*t);
     }
+
+    public double getZeroRate(Double t){
+        return constR;
+    }
 }

@@ -7,6 +7,7 @@ import com.chendu.jq.core.common.jqEnum.ValuationModel;
 import com.chendu.jq.core.market.JqMarket;
 import com.chendu.jq.core.market.MktAction;
 import com.chendu.jq.core.market.mktObj.JqTicker;
+import javafx.util.Pair;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -16,9 +17,11 @@ import java.util.List;
 @Data
 public abstract class Option extends JqTrade {
     public Double strike;
+    public List<LocalDate> observeDates;
     public List<LocalDate> exerciseDates;
     public JqTicker underlyingTicker;
     public ValuationModel valuationModel;
+    public Integer numPath;
     public OptionDirection optionDirection;
 
     public Option(){
@@ -41,5 +44,6 @@ public abstract class Option extends JqTrade {
         return Arrays.asList(new MktAction(JqMarket.yieldCurveField(), domCurrency, bump));
     }
 
-    protected abstract List<JqCashflow> calcPayoff();
+    public abstract Double calcPayOff(List<Pair<LocalDate, Double>> path);
+    public abstract List<JqCashflow> calcPayoff();
 }

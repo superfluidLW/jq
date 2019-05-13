@@ -9,6 +9,7 @@ import com.chendu.jq.core.common.jqEnum.*;
 import com.chendu.jq.core.market.JqMarket;
 import com.chendu.jq.core.market.mktObj.JqTicker;
 import com.chendu.jq.core.util.JsonUtils;
+import javafx.util.Pair;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -34,6 +35,11 @@ public class DigitalOption extends Option {
     @Override
     public Double[][] payOffChart() {
         return new Double[0][];
+    }
+
+    @Override
+    public Double calcPayOff(List<Pair<LocalDate, Double>> path) {
+        return null;
     }
 
     @Override
@@ -72,7 +78,7 @@ public class DigitalOption extends Option {
     }
 
     @Override
-    protected List<JqCashflow> calcPayoff() {
+    public List<JqCashflow> calcPayoff() {
         return null;
     }
 }
