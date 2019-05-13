@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 
 @Data
 public class VanillaOption extends Option {
-
-
     public VanillaOption(){
         super();
         tradeType = TradeType.VanillaOption;
@@ -33,6 +31,20 @@ public class VanillaOption extends Option {
         vo.setMaturityDate(this.maturityDate.plusDays(offset));
         vo.setExerciseDates(exerciseDates.stream().map(e -> e.plusDays(offset)).collect(Collectors.toList()));
         return vo;
+    }
+
+    @Override
+    public Double[][] payOffChart() {
+        double delta = strike * 0.01;
+        Double[][] payoff = new Double[40][2];
+        int offset = payoff.length/2;
+        for(int i = 0; i < payoff.length; ++i){
+            Double price = strike + (i-offset) * delta;
+            Double po = optionDirection == OptionDirection.Call ? Math.max(price-strike, 0) : Math.max(strike-price, 0);
+            payoff[i][0] = price;
+            payoff[i][1] = po;
+        }
+        return payoff;
     }
 
     @Override

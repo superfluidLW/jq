@@ -32,6 +32,11 @@ public class DigitalOption extends Option {
     }
 
     @Override
+    public Double[][] payOffChart() {
+        return new Double[0][];
+    }
+
+    @Override
     public JqResult calc(JqMarket jqMarket) {
         JqResult jqResult = new JqResult();
 

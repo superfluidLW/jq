@@ -27,6 +27,8 @@ public abstract class Option extends JqTrade {
 
     public abstract Option bumpMaturity(int offset);
 
+    public abstract Double[][] payOffChart();
+
     public List<MktAction> bumpSpot(Double bump){
         return Arrays.asList(new MktAction(JqMarket.tickerField(), underlyingTicker, bump));
     }

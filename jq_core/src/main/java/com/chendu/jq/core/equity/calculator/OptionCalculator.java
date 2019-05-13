@@ -7,6 +7,8 @@ import com.chendu.jq.core.equity.Option;
 import com.chendu.jq.core.market.JqMarket;
 import com.chendu.jq.core.util.JqLog;
 
+import java.util.ArrayList;
+
 public abstract class OptionCalculator implements ICalculator {
     public JqResult calc(JqTrade trade, JqMarket jqMarket) {
         if (!(trade instanceof Option)) {
@@ -17,7 +19,7 @@ public abstract class OptionCalculator implements ICalculator {
         Option option = (Option)trade;
         Double pv = calcPv(option, jqMarket);
 
-        Double deltaSpot = 0.1;
+        Double deltaSpot = 0.01;
         jqMarket.updateActions(option.bumpSpot(deltaSpot));
         Double pvSpotUp = calcPv(option, jqMarket);
         jqMarket.updateActions(option.bumpSpot(-deltaSpot));
@@ -28,12 +30,17 @@ public abstract class OptionCalculator implements ICalculator {
 
         jqMarket.updateActions(option.bumpVol(0.01));
         Double pvVolUp = calcPv(trade, jqMarket);
-        Double vega = (pvVolUp - pv);
+        jqMarket.updateActions(option.bumpVol(-0.01));
+        Double pvVolDown = calcPv(trade, jqMarket);
+        Double vega = (pvVolUp - pvVolDown) / 2.0;
 
         jqMarket.updateActions(option.bumpYieldCurve(0.0001));
         Double pvRup = calcPv(trade, jqMarket);
-        Double rho = (pvRup - pv);
+        jqMarket.updateActions(option.bumpYieldCurve(-0.0001));
+        Double pvRdown = calcPv(trade, jqMarket);
+        Double rho = (pvRup - pvRdown)/2.0;
 
+        jqMarket.updateActions(new ArrayList<>());
         Option tradeMaturityBumped = ((Option) trade).bumpMaturity(-1);
         Double pvMaturityBumped = calcPv(tradeMaturityBumped, jqMarket);
         Double theta = pvMaturityBumped - pv;

@@ -3,8 +3,10 @@ package com.chendu.jq.core.excel;
 import com.chendu.jq.core.JqTrade;
 import com.chendu.jq.core.common.JqResult;
 import com.chendu.jq.core.equity.DigitalOption;
+import com.chendu.jq.core.equity.Option;
 import com.chendu.jq.core.equity.VanillaOption;
 import com.chendu.jq.core.market.JqMarket;
+import com.chendu.jq.core.util.JsonUtils;
 import com.chendu.jq.core.util.TableWithHeader;
 import com.exceljava.jinx.ExcelAddIn;
 import com.exceljava.jinx.ExcelFunction;
@@ -89,16 +91,31 @@ public class XlFunc {
     }
 
     @ExcelFunction(
+            value = "jqOptionPayoff",
+            isVolatile = true
+    )
+    public static Double[][] jqOptionPayoff(String[][] labelValue) {
+        TableWithHeader twh = new TableWithHeader(transpose(labelValue));
+        JqTrade trade = twh.toTrades().get(0);
+
+        return ((Option)trade).payOffChart();
+    }
+
+    @ExcelFunction(
             value = "jqCalc",
             isVolatile = true
     )
-    public static String[][] jqCalc(String[][] labelValue, String[][] mktData) {
+    public static Object[][] jqXlCalc(String[][] labelValue, String[][] mktData) {
+        JqResult jqResult = jqCalc(labelValue, mktData);
+        return jqResult.toXlArray();
+    }
+
+    public static JqResult jqCalc(String[][] labelValue, String[][] mktData) {
         TableWithHeader twh = new TableWithHeader(transpose(labelValue));
         JqTrade trade = twh.toTrades().get(0);
         JqMarket mkt = XlUtil.toJqMarket(trade, mktData);
 
-        JqResult jqResult = trade.calc(mkt);
-        return jqResult.toStringArray();
+        return trade.calc(mkt);
     }
 
     public static String[][] transpose(String[][] matrix){
