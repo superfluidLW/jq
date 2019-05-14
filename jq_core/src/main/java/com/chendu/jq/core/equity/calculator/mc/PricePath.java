@@ -6,52 +6,50 @@ import javafx.util.Pair;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class PricePath {
     public static NormalDistribution normal = new NormalDistribution(0.0, 1.0);
 
-    public static List<List<Pair<LocalDate, Double>>> genPath(Option option, JqMarket jqMarket){
-        List<List<Pair<LocalDate, Double>>> paths = new ArrayList<>();
+    public static List<LinkedHashMap<LocalDate, Double>> genPath(Option option, JqMarket jqMarket){
+        List<LinkedHashMap<LocalDate, Double>> paths = new ArrayList<>(option.numPath);
         Double s0 = jqMarket.tickerPrice(option.getUnderlyingTicker());
         Double vol = jqMarket.tickerVol(option.getUnderlyingTicker());
         Double maturityTime = option.getDayCount().yearFraction(jqMarket.getMktDate(), option.getMaturityDate());
-        Double q = jqMarket.getDividendCurveMap().get(option.getUnderlyingTicker()).getDf(maturityTime);
-        Double r = jqMarket.jqCurve(option.getDomCurrency()).getDf(maturityTime);
+        Double q = jqMarket.getDividendCurveMap().get(option.getUnderlyingTicker()).getZeroRate(maturityTime);
+        Double r = jqMarket.jqCurve(option.getDomCurrency()).getZeroRate(maturityTime);
 
         for(int i = 0; i < option.numPath/2; ++i){
-            List<Pair<LocalDate, Double>> path = genSinglePath(s0, r, q, vol, option, jqMarket);
+            List<LinkedHashMap<LocalDate, Double>> path = genSinglePath(s0, r, q, vol, option, jqMarket);
 
-            paths.add(path);
-            paths.add(genAntitheticPath(path));
+            paths.addAll(path);
         }
 
         return paths;
     }
 
-    private static List<Pair<LocalDate, Double>> genSinglePath(Double s0, Double r, Double q, Double vol, Option option, JqMarket jqMarket){
-        List<Pair<LocalDate, Double>> path = new ArrayList<>();
+    private static List<LinkedHashMap<LocalDate, Double>> genSinglePath(Double s0, Double r, Double q, Double vol, Option option, JqMarket jqMarket){
+        LinkedHashMap<LocalDate, Double> path = new LinkedHashMap<>();
+        LinkedHashMap<LocalDate, Double> antitheticPath = new LinkedHashMap<>();
 
         LocalDate curDate = LocalDate.from(jqMarket.getMktDate());
-        path.add(new Pair<>(curDate, s0));
+        Double s = s0;
+        Double sAnti = s0;
+        path.put(curDate, s);
+        antitheticPath.put(curDate, sAnti);
         LocalDate nextDate = curDate.plusDays(1);
+        Double mu = r - q - vol*vol/2.0;
         while (!nextDate.isAfter(option.getMaturityDate())){
             Double dt = option.getDayCount().yearFraction(curDate, nextDate);
-            s0 *= (1.0 + (r-q) * dt + vol * normal.sample() * Math.sqrt(dt));
+            Double dw = normal.sample();
+            s = s * Math.exp (mu * dt + vol * normal.sample() * Math.sqrt(dt));
+            sAnti = sAnti * Math.exp (mu * dt + vol * normal.sample() * Math.sqrt(dt));
+            path.put(nextDate, s);
+            antitheticPath.put(nextDate, sAnti);
             curDate = nextDate;
             nextDate = curDate.plusDays(1);
         }
 
-        return path;
-    }
-
-    private static List<Pair<LocalDate, Double>> genAntitheticPath(List<Pair<LocalDate, Double>> path){
-        List<Pair<LocalDate, Double>> antitheticPath = new ArrayList<>();
-
-        for(int i = 0; i < path.size(); ++i){
-            antitheticPath.add(new Pair<>(path.get(i).getKey(), -path.get(i).getValue()));
-        }
-        return antitheticPath;
+        return Arrays.asList(path, antitheticPath);
     }
 }

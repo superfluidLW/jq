@@ -6,6 +6,7 @@ import com.chendu.jq.core.common.jqEnum.*;
 import com.chendu.jq.core.equity.VanillaOption;
 import com.chendu.jq.core.market.mktObj.JqTicker;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
@@ -122,6 +123,12 @@ public class TableWithHeader {
         try {
             if (genericType.equals(Double.class)) {
                 value = Double.parseDouble(val);
+            }
+            else if(genericType.equals(Integer.class)){
+                value = Integer.parseInt(val);
+            }
+            else if(genericType.equals(Boolean.class)){
+                value = Boolean.parseBoolean(val);
             }
             else if (genericType.equals(String.class)) {
                 value = val;

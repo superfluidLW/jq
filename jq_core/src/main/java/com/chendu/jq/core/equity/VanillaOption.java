@@ -14,10 +14,12 @@ import com.chendu.jq.core.market.mktObj.JqTicker;
 import com.chendu.jq.core.util.JsonUtils;
 import javafx.util.Pair;
 import lombok.Data;
+import org.apache.commons.math3.analysis.function.Max;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 
 @Data
@@ -50,8 +52,10 @@ public class VanillaOption extends Option {
     }
 
     @Override
-    public Double calcPayOff(List<Pair<LocalDate, Double>> path) {
-        return null;
+    public Double calcPayOff(LinkedHashMap<LocalDate, Double> path) {
+        LocalDate exerciseDate = exerciseDates.get(0);
+        Double price = path.get(exerciseDate);
+        return optionDirection == OptionDirection.Call ? Math.max(price-strike, 0.0) : Math.max(strike-price, 0.0);
     }
 
     @Override

@@ -13,6 +13,7 @@ import lombok.Data;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.LinkedHashMap;
 
 @Data
 public abstract class Option extends JqTrade {
@@ -22,10 +23,13 @@ public abstract class Option extends JqTrade {
     public JqTicker underlyingTicker;
     public ValuationModel valuationModel;
     public Integer numPath;
+    public Boolean calcGreeks;
     public OptionDirection optionDirection;
 
     public Option(){
         super();
+        numPath = 1000;
+        calcGreeks = false;
     }
 
     public abstract Option bumpMaturity(int offset);
@@ -44,6 +48,6 @@ public abstract class Option extends JqTrade {
         return Arrays.asList(new MktAction(JqMarket.yieldCurveField(), domCurrency, bump));
     }
 
-    public abstract Double calcPayOff(List<Pair<LocalDate, Double>> path);
+    public abstract Double calcPayOff(LinkedHashMap<LocalDate, Double> path);
     public abstract List<JqCashflow> calcPayoff();
 }

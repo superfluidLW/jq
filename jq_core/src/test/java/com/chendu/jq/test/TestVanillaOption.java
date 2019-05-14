@@ -100,8 +100,8 @@ public class TestVanillaOption {
     @Test
     public void validateVanillaCallMc(){
         String[][] table = new String[2][];
-        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "蒙特卡洛样本量", "期权方向", "本币币种", "名义面额"};
-        table[1] = new String[]{"VanillaOption", "2019-02-28", "2020-02-28", "100.0", "Act365", "SH000300", "2020-02-28", "MonteCarlo", "1000", "看涨", "人民币", "1"};
+        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "蒙特卡洛样本量", "计算期权希腊值", "期权方向", "本币币种", "名义面额"};
+        table[1] = new String[]{"VanillaOption", "2019-02-28", "2020-02-28", "100.0", "Act365", "SH000300", "2020-02-28", "MonteCarlo", "25000", "false", "看涨", "人民币", "1"};
 
         String[][] mktData = new String[5][2];
         mktData[0][0]= MktDataType.RiskfreeRate.name();
@@ -121,7 +121,7 @@ public class TestVanillaOption {
 
         JqResult jqResult = XlFunc.jqCalc(XlFunc.transpose(table), mktData);
         System.out.println(JsonUtils.writeValueAsString(jqResult));
-        assert Math.abs(jqResult.getPv() - 10.438019) < 1.0e-6;
+        assert Math.abs(jqResult.getPv() - 10.438019) < 0.1;
     }
 
     @Test

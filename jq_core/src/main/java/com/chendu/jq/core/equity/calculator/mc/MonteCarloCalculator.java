@@ -7,13 +7,19 @@ import com.chendu.jq.core.market.JqMarket;
 import javafx.util.Pair;
 
 import java.time.LocalDate;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.SortedMap;
 
 public class MonteCarloCalculator extends OptionCalculator {
     @Override
     public Double calcPv(JqTrade trade, JqMarket jqMarket) {
         Option option = (Option)trade;
-        List<List<Pair<LocalDate, Double>>> paths = PricePath.genPath(option, jqMarket);
-        return paths.stream().mapToDouble(e -> option.calcPayOff(e)).average().getAsDouble();
+        List<LinkedHashMap<LocalDate, Double>> paths = PricePath.genPath(option, jqMarket);
+        Double t = option.getDayCount().yearFraction(jqMarket.getMktDate(), option.getMaturityDate());
+        Double df = jqMarket.getYieldCurveMap().get(option.getDomCurrency()).getDf(t);
+
+        return df * paths.stream().mapToDouble(e -> option.calcPayOff(e)).average().getAsDouble();
     }
 }

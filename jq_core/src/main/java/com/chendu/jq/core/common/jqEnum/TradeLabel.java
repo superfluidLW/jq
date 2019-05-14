@@ -10,6 +10,7 @@ public enum   TradeLabel {
     UnderlyingTicker("标的资产编码"),
     ValuationModel("估值方法"),
     NumPath("蒙特卡洛样本量"),
+    CalcGreeks("计算期权希腊值"),
     Strike("行权价格"),
     DayCount("计息基准"),
     OptionDirection("期权方向"),

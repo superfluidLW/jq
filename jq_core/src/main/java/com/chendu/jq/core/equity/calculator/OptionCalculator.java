@@ -2,6 +2,7 @@ package com.chendu.jq.core.equity.calculator;
 
 import com.chendu.jq.core.JqTrade;
 import com.chendu.jq.core.common.JqResult;
+import com.chendu.jq.core.common.jqEnum.ValuationModel;
 import com.chendu.jq.core.common.jqInterface.ICalculator;
 import com.chendu.jq.core.equity.Option;
 import com.chendu.jq.core.market.JqMarket;
@@ -18,6 +19,11 @@ public abstract class OptionCalculator implements ICalculator {
 
         Option option = (Option)trade;
         Double pv = calcPv(option, jqMarket);
+
+        if(option.valuationModel == ValuationModel.MonteCarlo && !option.getCalcGreeks()){
+            jqResult.setPv(pv);
+            return jqResult;
+        }
 
         Double deltaSpot = 0.01;
         jqMarket.updateActions(option.bumpSpot(deltaSpot));

@@ -15,6 +15,7 @@ import lombok.Data;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.LinkedHashMap;
 
 @Data
 public class DigitalOption extends Option {
@@ -38,7 +39,7 @@ public class DigitalOption extends Option {
     }
 
     @Override
-    public Double calcPayOff(List<Pair<LocalDate, Double>> path) {
+    public Double calcPayOff(LinkedHashMap<LocalDate, Double> path) {
         return null;
     }
 
