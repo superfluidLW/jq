@@ -12,14 +12,14 @@ public class PricePath {
     public static NormalDistribution normal = new NormalDistribution(0.0, 1.0);
 
     public static List<LinkedHashMap<LocalDate, Double>> genPath(Option option, JqMarket jqMarket){
-        List<LinkedHashMap<LocalDate, Double>> paths = new ArrayList<>(option.numPath);
+        List<LinkedHashMap<LocalDate, Double>> paths = new ArrayList<>(option.numMcPath);
         Double s0 = jqMarket.tickerPrice(option.getUnderlyingTicker());
         Double vol = jqMarket.tickerVol(option.getUnderlyingTicker());
         Double maturityTime = option.getDayCount().yearFraction(jqMarket.getMktDate(), option.getMaturityDate());
         Double q = jqMarket.getDividendCurveMap().get(option.getUnderlyingTicker()).getZeroRate(maturityTime);
         Double r = jqMarket.jqCurve(option.getDomCurrency()).getZeroRate(maturityTime);
 
-        for(int i = 0; i < option.numPath/2; ++i){
+        for(int i = 0; i < option.numMcPath/2; ++i){
             List<LinkedHashMap<LocalDate, Double>> path = genSinglePath(s0, r, q, vol, option, jqMarket);
 
             paths.addAll(path);

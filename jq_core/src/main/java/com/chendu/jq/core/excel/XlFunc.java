@@ -68,8 +68,8 @@ public class XlFunc {
         int maxRow = 0;
         for(int i = 0; i < classes.size(); ++i){
             try {
-                Method method = classes.get(i).getMethod("templateTradeData", null);
-                String[][] template = (String[][])method.invoke(null, null);
+                Method method = classes.get(i).getMethod("templateTradeData");
+                String[][] template = (String[][])method.invoke(null);
                 templates.add(template);
                 if(template.length > maxRow){
                     maxRow = template.length;
@@ -102,7 +102,7 @@ public class XlFunc {
     }
 
     @ExcelFunction(
-            value = "jqCalc",
+            value = "jqXlCalc",
             isVolatile = true
     )
     public static Object[][] jqXlCalc(String[][] labelValue, String[][] mktData) {

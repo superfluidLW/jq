@@ -12,10 +12,13 @@ public class JqTradeLabelSeq {
             "optionDirection",
             "underlyingTicker",
             "exerciseDates",
+            "observeDates",
             "strike",
             "dayCount",
             "domCurrency",
             "fgnCurrency",
-            "valuationModel"
+            "valuationModel",
+            "numMcPath",
+            "calcMcGreeks"
     ) ;
 }

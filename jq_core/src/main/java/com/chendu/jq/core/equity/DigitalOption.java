@@ -64,18 +64,19 @@ public class DigitalOption extends Option {
     }
 
     public static String[][] templateTradeData() {
-        DigitalOption vanillaOption = new DigitalOption();
-        vanillaOption.setStartDate(LocalDate.now());
-        vanillaOption.setMaturityDate(LocalDate.now().plusYears(1));
-        vanillaOption.setExerciseDates(Arrays.asList(LocalDate.now().plusYears(1)));
-        vanillaOption.setStrike(1000.0);
-        vanillaOption.setOptionDirection(OptionDirection.Call);
-        vanillaOption.setUnderlyingTicker(new JqTicker("SH000300"));
-        vanillaOption.setDayCount(new DayCount(DayCountType.Act365));
-        vanillaOption.setNotional(1.0);
-        vanillaOption.setDomCurrency(Currency.Cny);
-        vanillaOption.setValuationModel(ValuationModel.Analytical);
-        return JqTrade.templateTradeData(DigitalOption.class, vanillaOption);
+        DigitalOption digitalOption = new DigitalOption();
+        digitalOption.setStartDate(LocalDate.now());
+        digitalOption.setMaturityDate(LocalDate.now().plusYears(1));
+        digitalOption.setExerciseDates(Arrays.asList(LocalDate.now().plusYears(1)));
+        digitalOption.setObserveDates(Arrays.asList(LocalDate.now().plusYears(1)));
+        digitalOption.setStrike(1000.0);
+        digitalOption.setOptionDirection(OptionDirection.Call);
+        digitalOption.setUnderlyingTicker(new JqTicker("SH000300"));
+        digitalOption.setDayCount(new DayCount(DayCountType.Act365));
+        digitalOption.setNotional(1.0);
+        digitalOption.setDomCurrency(Currency.Cny);
+        digitalOption.setValuationModel(ValuationModel.Analytical);
+        return JqTrade.templateTradeData(DigitalOption.class, digitalOption);
     }
 
     @Override

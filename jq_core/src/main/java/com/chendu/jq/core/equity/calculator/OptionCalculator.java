@@ -20,7 +20,7 @@ public abstract class OptionCalculator implements ICalculator {
         Option option = (Option)trade;
         Double pv = calcPv(option, jqMarket);
 
-        if(option.valuationModel == ValuationModel.MonteCarlo && !option.getCalcGreeks()){
+        if(option.valuationModel == ValuationModel.MonteCarlo && !option.getCalcMcGreeks()){
             jqResult.setPv(pv);
             return jqResult;
         }

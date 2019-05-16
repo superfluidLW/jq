@@ -22,14 +22,14 @@ public abstract class Option extends JqTrade {
     public List<LocalDate> exerciseDates;
     public JqTicker underlyingTicker;
     public ValuationModel valuationModel;
-    public Integer numPath;
-    public Boolean calcGreeks;
+    public Integer numMcPath;
+    public Boolean calcMcGreeks;
     public OptionDirection optionDirection;
 
     public Option(){
         super();
-        numPath = 1000;
-        calcGreeks = false;
+        numMcPath = 5000;
+        calcMcGreeks = false;
     }
 
     public abstract Option bumpMaturity(int offset);

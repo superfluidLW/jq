@@ -81,6 +81,7 @@ public class VanillaOption extends Option {
         vanillaOption.setStartDate(LocalDate.now());
         vanillaOption.setMaturityDate(LocalDate.now().plusYears(1));
         vanillaOption.setExerciseDates(Arrays.asList(LocalDate.now().plusYears(1)));
+        vanillaOption.setObserveDates(Arrays.asList(LocalDate.now().plusYears(1)));
         vanillaOption.setStrike(1000.0);
         vanillaOption.setOptionDirection(OptionDirection.Call);
         vanillaOption.setUnderlyingTicker(new JqTicker("SH000300"));

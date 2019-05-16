@@ -4,13 +4,10 @@ import com.chendu.jq.core.JqTrade;
 import com.chendu.jq.core.equity.Option;
 import com.chendu.jq.core.equity.calculator.OptionCalculator;
 import com.chendu.jq.core.market.JqMarket;
-import javafx.util.Pair;
 
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.SortedMap;
 
 public class MonteCarloCalculator extends OptionCalculator {
     @Override
