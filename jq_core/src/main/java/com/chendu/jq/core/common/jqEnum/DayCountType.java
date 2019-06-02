@@ -1,7 +1,5 @@
 package com.chendu.jq.core.common.jqEnum;
 
-import com.chendu.jq.core.common.dayCount.Act360;
-import com.chendu.jq.core.common.dayCount.Act365;
 import com.chendu.jq.core.common.dayCount.DayCount;
 import com.chendu.jq.core.util.JqParser;
 import lombok.Getter;

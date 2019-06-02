@@ -5,13 +5,10 @@ import com.chendu.jq.core.common.jqEnum.OptionDirection;
 import com.chendu.jq.core.equity.VanillaOption;
 import com.chendu.jq.core.equity.calculator.OptionCalculator;
 import com.chendu.jq.core.market.JqMarket;
-import org.apache.commons.math3.distribution.NormalDistribution;
 
 import java.time.LocalDate;
 
 public class EuropeanVanillaCalculator extends OptionCalculator {
-    public static NormalDistribution normal = new NormalDistribution(0.0, 1.0);
-
     @Override
     public Double calcPv(JqTrade trade, JqMarket jqMarket){
         VanillaOption vanillaOption = (VanillaOption) trade;

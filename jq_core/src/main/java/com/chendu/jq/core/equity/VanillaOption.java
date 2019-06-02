@@ -3,23 +3,19 @@ package com.chendu.jq.core.equity;
 import com.chendu.jq.core.JqTrade;
 import com.chendu.jq.core.common.JqCashflow;
 import com.chendu.jq.core.common.JqResult;
-import com.chendu.jq.core.common.dayCount.Act360;
 import com.chendu.jq.core.common.dayCount.DayCount;
 import com.chendu.jq.core.common.jqEnum.*;
-import com.chendu.jq.core.equity.calculator.analytical.EuropeanDigitalCalculator;
 import com.chendu.jq.core.equity.calculator.analytical.EuropeanVanillaCalculator;
 import com.chendu.jq.core.equity.calculator.mc.MonteCarloCalculator;
 import com.chendu.jq.core.market.JqMarket;
 import com.chendu.jq.core.market.mktObj.JqTicker;
 import com.chendu.jq.core.util.JsonUtils;
-import javafx.util.Pair;
 import lombok.Data;
-import org.apache.commons.math3.analysis.function.Max;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.List;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
@@ -65,8 +61,8 @@ public class VanillaOption extends Option {
             return mc.calc(this, jqMarket);
         }
         else{
-            EuropeanVanillaCalculator edc = new EuropeanVanillaCalculator();
-            return edc.calc(this, jqMarket);
+            EuropeanVanillaCalculator evc = new EuropeanVanillaCalculator();
+            return evc.calc(this, jqMarket);
         }
     }
 

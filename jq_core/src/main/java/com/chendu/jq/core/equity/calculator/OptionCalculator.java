@@ -7,10 +7,13 @@ import com.chendu.jq.core.common.jqInterface.ICalculator;
 import com.chendu.jq.core.equity.Option;
 import com.chendu.jq.core.market.JqMarket;
 import com.chendu.jq.core.util.JqLog;
+import org.apache.commons.math3.distribution.NormalDistribution;
 
 import java.util.ArrayList;
 
 public abstract class OptionCalculator implements ICalculator {
+    public static NormalDistribution normal = new NormalDistribution(0.0, 1.0);
+
     public JqResult calc(JqTrade trade, JqMarket jqMarket) {
         if (!(trade instanceof Option)) {
             JqLog.info("Not an option trade", this.getClass().getName(), trade.getClass().getName());

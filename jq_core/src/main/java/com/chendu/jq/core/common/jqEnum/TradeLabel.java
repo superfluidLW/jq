@@ -13,6 +13,7 @@ public enum   TradeLabel {
     CalcMcGreeks("计算MC希腊值"),
     Strike("行权价格"),
     DayCount("计息基准"),
+    DigitalPayoff("二值期权收益"),
     OptionDirection("期权方向"),
     DomCurrency("本币币种"),
     FgnCurrency("外币币种"),

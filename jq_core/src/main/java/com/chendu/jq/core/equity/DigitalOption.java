@@ -3,23 +3,23 @@ package com.chendu.jq.core.equity;
 import com.chendu.jq.core.JqTrade;
 import com.chendu.jq.core.common.JqCashflow;
 import com.chendu.jq.core.common.JqResult;
-import com.chendu.jq.core.common.dayCount.Act360;
 import com.chendu.jq.core.common.dayCount.DayCount;
 import com.chendu.jq.core.common.jqEnum.*;
+import com.chendu.jq.core.equity.calculator.analytical.EuropeanDigitalCalculator;
+import com.chendu.jq.core.equity.calculator.mc.MonteCarloCalculator;
 import com.chendu.jq.core.market.JqMarket;
 import com.chendu.jq.core.market.mktObj.JqTicker;
 import com.chendu.jq.core.util.JsonUtils;
-import javafx.util.Pair;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.List;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 @Data
 public class DigitalOption extends Option {
-
+    private Double digitalPayoff;
 
     public DigitalOption(){
         super();
@@ -40,18 +40,22 @@ public class DigitalOption extends Option {
 
     @Override
     public Double calcPayOff(LinkedHashMap<LocalDate, Double> path) {
-        return null;
+        LocalDate exerciseDate = exerciseDates.get(0);
+        Double price = path.get(exerciseDate);
+        return optionDirection == OptionDirection.Call ? (price>strike ? notional : 0.0) : (price < strike ? notional : 0.0);
     }
 
     @Override
     public JqResult calc(JqMarket jqMarket) {
         JqResult jqResult = new JqResult();
 
-        if(valuationModel == ValuationModel.Analytical){
-
+        if(valuationModel == ValuationModel.MonteCarlo){
+            MonteCarloCalculator mc = new MonteCarloCalculator();
+            return mc.calc(this, jqMarket);
         }
-        else if(valuationModel == ValuationModel.MonteCarlo){
-
+        else if(valuationModel == ValuationModel.Analytical){
+            EuropeanDigitalCalculator edc = new EuropeanDigitalCalculator();
+            return edc.calc(this, jqMarket);
         }
 
         return jqResult;
