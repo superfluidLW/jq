@@ -27,8 +27,8 @@ public class TestDigitalOption {
     @Test
     public void validateDigitalCall(){
         String[][] table = new String[2][];
-        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额"};
-        table[1] = new String[]{"DigitalOption", "2019-02-28", "2020-02-28", "100.0", "Act365", "SH000300", "2020-02-28", "Analytical", "看涨", "人民币", "1"};
+        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "二值期权收益"};
+        table[1] = new String[]{"DigitalOption", "2019-02-28", "2020-02-28", "100.0", "Act365", "SH000300", "2020-02-28", "Analytical", "看涨", "人民币", "1", "1.0"};
 
         String[][] mktData = new String[5][2];
         mktData[0][0]= MktDataType.RiskfreeRate.name();
@@ -47,19 +47,22 @@ public class TestDigitalOption {
         mktData[4][1] = "2019-02-28";
 
         JqResult jqResult = XlFunc.jqCalc(XlFunc.transpose(table), mktData);
-        assert Math.abs(jqResult.getPv() - 10.438019) < 1.0e-6;
-        assert Math.abs(jqResult.getDelta() - 0.623858) < 2.0e-6;
-        assert Math.abs(jqResult.getGamma() - 0.018036) < 1.0e-6;
-        assert Math.abs(jqResult.getRho() - 0.005320) < 1.0e-6;
-        assert Math.abs(jqResult.getVega() - 0.375265) < 1.0e-6;
-        assert Math.abs(jqResult.getTheta() - (-0.014091)) < 1.0e-6;
+
+        System.out.println(JsonUtils.writeValueAsString(jqResult));
+        assert Math.abs(jqResult.getPv() - 0.531954) < 1.0e-6;
+        assert Math.abs(jqResult.getDelta() - 0.018397) < 2.0e-6;
+        assert Math.abs(jqResult.getGamma() - (-0.000315)) < 1.0e-6;
+        assert Math.abs(jqResult.getRho() - 0.00013439) < 1.0e-5;
+        assert Math.abs(jqResult.getVega() - (-0.006560)) < 1.0e-6;
+        assert Math.abs(jqResult.getTheta() - (0.0000981)) < 1.0e-6;
     }
 
     @Test
     public void validateDigitalPut(){
         String[][] table = new String[2][];
-        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额"};
-        table[1] = new String[]{"DigitalOption", "2019-02-28", "2020-02-28", "100.0", "Act365", "SH000300", "2020-02-28", "Analytical", "Put", "人民币", "1"};
+
+        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "二值期权收益"};
+        table[1] = new String[]{"DigitalOption", "2019-02-28", "2020-02-28", "100.0", "Act365", "SH000300", "2020-02-28", "Analytical", "看跌", "人民币", "1", "1.0"};
 
         String[][] mktData = new String[5][2];
         mktData[0][0]= MktDataType.RiskfreeRate.name();
@@ -78,20 +81,20 @@ public class TestDigitalOption {
         mktData[4][1] = "2019-02-28";
 
         JqResult jqResult = XlFunc.jqCalc(XlFunc.transpose(table), mktData);
-        assert Math.abs(jqResult.getPv() - 5.580697) < 1.0e-6;
-        assert Math.abs(jqResult.getDelta() - (-0.356341)) < 2.0e-6;
-        assert Math.abs(jqResult.getGamma() - 0.018036) < 1.0e-6;
-        assert Math.abs(jqResult.getRho() - (-0.004193)) < 1.0e-6;
-        assert Math.abs(jqResult.getVega() - 0.375265) < 1.0e-6;
-        assert Math.abs(jqResult.getTheta() - (-0.006538)) < 1.0e-6;
+        assert Math.abs(jqResult.getPv() - 0.419275) < 1.0e-6;
+        assert Math.abs(jqResult.getDelta() - (-0.018397)) < 2.0e-6;
+        assert Math.abs(jqResult.getGamma() - 0.000315) < 1.0e-6;
+        assert Math.abs(jqResult.getRho() - (-0.00022952)) < 1.0e-6;
+        assert Math.abs(jqResult.getVega() - 0.006560) < 1.0e-6;
+        assert Math.abs(jqResult.getTheta() - (0.000032)) < 1.0e-6;
     }
 
 
     @Test
     public void validateDigitalCallMc(){
         String[][] table = new String[2][];
-        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "蒙特卡洛样本量", "计算MC希腊值", "期权方向", "本币币种", "名义面额"};
-        table[1] = new String[]{"DigitalOption", "2019-02-28", "2020-02-28", "100.0", "Act365", "SH000300", "2020-02-28", "MonteCarlo", "25000", "false", "看涨", "人民币", "1"};
+        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "蒙特卡洛样本量", "计算MC希腊值", "期权方向", "本币币种", "名义面额", "二值期权收益"};
+        table[1] = new String[]{"DigitalOption", "2019-02-28", "2020-02-28", "100.0", "Act365", "SH000300", "2020-02-28", "MonteCarlo", "25000", "false", "看涨", "人民币", "1", "1.0"};
 
         String[][] mktData = new String[5][2];
         mktData[0][0]= MktDataType.RiskfreeRate.name();
@@ -111,7 +114,7 @@ public class TestDigitalOption {
 
         JqResult jqResult = XlFunc.jqCalc(XlFunc.transpose(table), mktData);
         System.out.println(JsonUtils.writeValueAsString(jqResult));
-        assert Math.abs(jqResult.getPv() - 10.438019) < 0.2;
+        assert Math.abs(jqResult.getPv() - 0.531954) < 0.01;
     }
 
     @Test

@@ -6,6 +6,7 @@ import com.chendu.jq.core.equity.DigitalOption;
 import com.chendu.jq.core.equity.Option;
 import com.chendu.jq.core.equity.VanillaOption;
 import com.chendu.jq.core.market.JqMarket;
+import com.chendu.jq.core.util.JqLog;
 import com.chendu.jq.core.util.JsonUtils;
 import com.chendu.jq.core.util.TableWithHeader;
 import com.exceljava.jinx.ExcelAddIn;
@@ -76,6 +77,7 @@ public class XlFunc {
                 }
             }
             catch (Exception ex){
+                JqLog.error("Failed to get value of trade label {}", ex.getMessage());
 
             }
         }

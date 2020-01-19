@@ -17,6 +17,7 @@ public class JqTradeLabelSeq {
             "dayCount",
             "domCurrency",
             "fgnCurrency",
+            "digitalPayoff",
             "valuationModel",
             "numMcPath",
             "calcMcGreeks"

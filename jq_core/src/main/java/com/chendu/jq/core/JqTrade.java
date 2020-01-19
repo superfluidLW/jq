@@ -100,8 +100,9 @@ public abstract class JqTrade implements Serializable {
                 catch (IllegalAccessException ex){
                     JqLog.error("Failed to get value of trade label {}", tradelabel);
                 }
+
+                i ++;
             }
-            i ++;
         }
         return template;
     }

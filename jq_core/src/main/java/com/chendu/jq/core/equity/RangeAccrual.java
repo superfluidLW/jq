@@ -6,6 +6,7 @@ import com.chendu.jq.core.common.JqResult;
 import com.chendu.jq.core.common.dayCount.DayCount;
 import com.chendu.jq.core.common.jqEnum.*;
 import com.chendu.jq.core.equity.calculator.analytical.EuropeanDigitalCalculator;
+import com.chendu.jq.core.equity.calculator.analytical.RangeAccrualCalculator;
 import com.chendu.jq.core.equity.calculator.mc.MonteCarloCalculator;
 import com.chendu.jq.core.market.JqMarket;
 import com.chendu.jq.core.market.mktObj.JqTicker;
@@ -13,25 +14,24 @@ import com.chendu.jq.core.util.JsonUtils;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
-public class DigitalOption extends Option {
-    public Double digitalPayoff;
+public class RangeAccrual extends Option {
+    private Double digitalPayoff;
 
-    public DigitalOption(){
+    public RangeAccrual(){
         super();
         tradeType = TradeType.DigitalOption;
     }
 
     @Override
     public Option bumpMaturity(int offset) {
-        DigitalOption vo = JsonUtils.readValue(JsonUtils.writeValueAsString(this), DigitalOption.class);
+        RangeAccrual vo = JsonUtils.readValue(JsonUtils.writeValueAsString(this), RangeAccrual.class);
         vo.setMaturityDate(this.maturityDate.plusDays(offset));
-        vo.setExerciseDates(this.exerciseDates.stream().map(d -> d.plusDays(offset)).collect(Collectors.toList()));
         return vo;
     }
 
@@ -56,8 +56,8 @@ public class DigitalOption extends Option {
             return mc.calc(this, jqMarket);
         }
         else if(valuationModel == ValuationModel.Analytical){
-            EuropeanDigitalCalculator edc = new EuropeanDigitalCalculator();
-            return edc.calc(this, jqMarket);
+            RangeAccrualCalculator rac = new RangeAccrualCalculator();
+            return rac.calc(this, jqMarket);
         }
 
         return jqResult;
@@ -70,20 +70,25 @@ public class DigitalOption extends Option {
     }
 
     public static String[][] templateTradeData() {
-        DigitalOption digitalOption = new DigitalOption();
-        digitalOption.setStartDate(LocalDate.now());
-        digitalOption.setMaturityDate(LocalDate.now().plusYears(1));
-        digitalOption.setExerciseDates(Arrays.asList(LocalDate.now().plusYears(1)));
-        digitalOption.setObserveDates(Arrays.asList(LocalDate.now().plusYears(1)));
-        digitalOption.setStrike(1000.0);
-        digitalOption.setOptionDirection(OptionDirection.Call);
-        digitalOption.setUnderlyingTicker(new JqTicker("SH000300"));
-        digitalOption.setDayCount(new DayCount(DayCountType.Act365));
-        digitalOption.setDigitalPayoff(1.0);
-        digitalOption.setNotional(1.0);
-        digitalOption.setDomCurrency(Currency.Cny);
-        digitalOption.setValuationModel(ValuationModel.Analytical);
-        return JqTrade.templateTradeData(DigitalOption.class, digitalOption);
+        RangeAccrual rangeAccrual = new RangeAccrual();
+        rangeAccrual.setStartDate(LocalDate.now());
+        rangeAccrual.setMaturityDate(LocalDate.now().plusYears(1));
+        rangeAccrual.setExerciseDates(Arrays.asList(LocalDate.now().plusYears(1)));
+
+        List<LocalDate> obsDates = new ArrayList<>();
+        for(int i = 1; i <= 11; ++i){
+            obsDates.add(LocalDate.now().plusMonths(i));
+        }
+        obsDates.add(LocalDate.now().plusYears(1));
+        rangeAccrual.setObserveDates(obsDates);
+        rangeAccrual.setStrike(1000.0);
+        rangeAccrual.setOptionDirection(OptionDirection.Call);
+        rangeAccrual.setUnderlyingTicker(new JqTicker("SH000300"));
+        rangeAccrual.setDayCount(new DayCount(DayCountType.Act365));
+        rangeAccrual.setNotional(1.0);
+        rangeAccrual.setDomCurrency(Currency.Cny);
+        rangeAccrual.setValuationModel(ValuationModel.Analytical);
+        return JqTrade.templateTradeData(RangeAccrual.class, rangeAccrual);
     }
 
     @Override

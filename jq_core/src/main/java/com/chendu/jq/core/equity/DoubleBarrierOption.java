@@ -5,6 +5,7 @@ import com.chendu.jq.core.common.JqCashflow;
 import com.chendu.jq.core.common.JqResult;
 import com.chendu.jq.core.common.dayCount.DayCount;
 import com.chendu.jq.core.common.jqEnum.*;
+import com.chendu.jq.core.equity.calculator.analytical.DoubleBarrierCalculator;
 import com.chendu.jq.core.equity.calculator.analytical.EuropeanDigitalCalculator;
 import com.chendu.jq.core.equity.calculator.mc.MonteCarloCalculator;
 import com.chendu.jq.core.market.JqMarket;
@@ -16,22 +17,20 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
-public class DigitalOption extends Option {
-    public Double digitalPayoff;
+public class DoubleBarrierOption extends Option {
+    private Double digitalPayoff;
 
-    public DigitalOption(){
+    public DoubleBarrierOption(){
         super();
         tradeType = TradeType.DigitalOption;
     }
 
     @Override
     public Option bumpMaturity(int offset) {
-        DigitalOption vo = JsonUtils.readValue(JsonUtils.writeValueAsString(this), DigitalOption.class);
+        DoubleBarrierOption vo = JsonUtils.readValue(JsonUtils.writeValueAsString(this), DoubleBarrierOption.class);
         vo.setMaturityDate(this.maturityDate.plusDays(offset));
-        vo.setExerciseDates(this.exerciseDates.stream().map(d -> d.plusDays(offset)).collect(Collectors.toList()));
         return vo;
     }
 
@@ -56,8 +55,8 @@ public class DigitalOption extends Option {
             return mc.calc(this, jqMarket);
         }
         else if(valuationModel == ValuationModel.Analytical){
-            EuropeanDigitalCalculator edc = new EuropeanDigitalCalculator();
-            return edc.calc(this, jqMarket);
+            DoubleBarrierCalculator dbc = new DoubleBarrierCalculator();
+            return dbc.calc(this, jqMarket);
         }
 
         return jqResult;
@@ -70,20 +69,19 @@ public class DigitalOption extends Option {
     }
 
     public static String[][] templateTradeData() {
-        DigitalOption digitalOption = new DigitalOption();
-        digitalOption.setStartDate(LocalDate.now());
-        digitalOption.setMaturityDate(LocalDate.now().plusYears(1));
-        digitalOption.setExerciseDates(Arrays.asList(LocalDate.now().plusYears(1)));
-        digitalOption.setObserveDates(Arrays.asList(LocalDate.now().plusYears(1)));
-        digitalOption.setStrike(1000.0);
-        digitalOption.setOptionDirection(OptionDirection.Call);
-        digitalOption.setUnderlyingTicker(new JqTicker("SH000300"));
-        digitalOption.setDayCount(new DayCount(DayCountType.Act365));
-        digitalOption.setDigitalPayoff(1.0);
-        digitalOption.setNotional(1.0);
-        digitalOption.setDomCurrency(Currency.Cny);
-        digitalOption.setValuationModel(ValuationModel.Analytical);
-        return JqTrade.templateTradeData(DigitalOption.class, digitalOption);
+        DoubleBarrierOption doubleBarrierOption = new DoubleBarrierOption();
+        doubleBarrierOption.setStartDate(LocalDate.now());
+        doubleBarrierOption.setMaturityDate(LocalDate.now().plusYears(1));
+        doubleBarrierOption.setExerciseDates(Arrays.asList(LocalDate.now().plusYears(1)));
+        doubleBarrierOption.setObserveDates(Arrays.asList(LocalDate.now().plusYears(1)));
+        doubleBarrierOption.setStrike(1000.0);
+        doubleBarrierOption.setOptionDirection(OptionDirection.Call);
+        doubleBarrierOption.setUnderlyingTicker(new JqTicker("SH000300"));
+        doubleBarrierOption.setDayCount(new DayCount(DayCountType.Act365));
+        doubleBarrierOption.setNotional(1.0);
+        doubleBarrierOption.setDomCurrency(Currency.Cny);
+        doubleBarrierOption.setValuationModel(ValuationModel.Analytical);
+        return JqTrade.templateTradeData(DoubleBarrierOption.class, doubleBarrierOption);
     }
 
     @Override

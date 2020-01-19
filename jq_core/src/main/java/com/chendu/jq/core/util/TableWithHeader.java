@@ -3,6 +3,7 @@ package com.chendu.jq.core.util;
 import com.chendu.jq.core.JqTrade;
 import com.chendu.jq.core.common.dayCount.DayCount;
 import com.chendu.jq.core.common.jqEnum.*;
+import com.chendu.jq.core.equity.DigitalOption;
 import com.chendu.jq.core.equity.VanillaOption;
 import com.chendu.jq.core.market.mktObj.JqTicker;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -68,6 +69,8 @@ public class TableWithHeader {
                     break;
                 case RangeAccrual:
                 case DigitalOption:
+                    trade = toClass(DigitalOption.class, i);
+                    break;
                 case DoubleBarrierOption:
                     break;
             }
