@@ -6,7 +6,6 @@ import com.chendu.jq.core.common.JqResult;
 import com.chendu.jq.core.common.dayCount.DayCount;
 import com.chendu.jq.core.common.jqEnum.*;
 import com.chendu.jq.core.equity.calculator.analytical.DoubleBarrierCalculator;
-import com.chendu.jq.core.equity.calculator.analytical.EuropeanDigitalCalculator;
 import com.chendu.jq.core.equity.calculator.mc.MonteCarloCalculator;
 import com.chendu.jq.core.market.JqMarket;
 import com.chendu.jq.core.market.mktObj.JqTicker;
@@ -20,11 +19,14 @@ import java.util.List;
 
 @Data
 public class DoubleBarrierOption extends Option {
-    private Double digitalPayoff;
+    private Double rebate;
+    private Double coupon;
+    private Double lBarrier;
+    private Double uBarrier;
 
     public DoubleBarrierOption(){
         super();
-        tradeType = TradeType.DigitalOption;
+        tradeType = TradeType.DoubleBarrierOption;
     }
 
     @Override
@@ -74,12 +76,15 @@ public class DoubleBarrierOption extends Option {
         doubleBarrierOption.setMaturityDate(LocalDate.now().plusYears(1));
         doubleBarrierOption.setExerciseDates(Arrays.asList(LocalDate.now().plusYears(1)));
         doubleBarrierOption.setObserveDates(Arrays.asList(LocalDate.now().plusYears(1)));
-        doubleBarrierOption.setStrike(1000.0);
         doubleBarrierOption.setOptionDirection(OptionDirection.Call);
         doubleBarrierOption.setUnderlyingTicker(new JqTicker("SH000300"));
         doubleBarrierOption.setDayCount(new DayCount(DayCountType.Act365));
         doubleBarrierOption.setNotional(1.0);
         doubleBarrierOption.setDomCurrency(Currency.Cny);
+        doubleBarrierOption.setLBarrier(900.0);
+        doubleBarrierOption.setUBarrier(1100.0);
+        doubleBarrierOption.setRebate(0.025);
+        doubleBarrierOption.setCoupon(0.03);
         doubleBarrierOption.setValuationModel(ValuationModel.Analytical);
         return JqTrade.templateTradeData(DoubleBarrierOption.class, doubleBarrierOption);
     }

@@ -18,7 +18,11 @@ public enum   TradeLabel {
     DomCurrency("本币币种"),
     FgnCurrency("外币币种"),
     ObserveDates("观察日期"),
-    ExerciseDates("行权日期");
+    ExerciseDates("行权日期"),
+    LBarrier("低障碍"),
+    UBarrier("高障碍"),
+    KoRebate("敲出补偿"),
+    KiCoupon("敲入基础票息");
 
     @Getter
     private String nameCn;

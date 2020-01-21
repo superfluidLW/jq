@@ -3,6 +3,7 @@ package com.chendu.jq.core.excel;
 import com.chendu.jq.core.JqTrade;
 import com.chendu.jq.core.common.JqResult;
 import com.chendu.jq.core.equity.DigitalOption;
+import com.chendu.jq.core.equity.DoubleBarrierOption;
 import com.chendu.jq.core.equity.Option;
 import com.chendu.jq.core.equity.VanillaOption;
 import com.chendu.jq.core.market.JqMarket;
@@ -64,7 +65,7 @@ public class XlFunc {
             isVolatile = true
     )
     public static String[][] getTemplateTradeData() {
-        List<Class> classes = Arrays.asList(VanillaOption.class, DigitalOption.class);
+        List<Class> classes = Arrays.asList(VanillaOption.class, DigitalOption.class, DoubleBarrierOption.class);
         List<String[][]> templates = new ArrayList<>();
         int maxRow = 0;
         for(int i = 0; i < classes.size(); ++i){
