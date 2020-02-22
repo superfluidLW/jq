@@ -25,10 +25,10 @@ public class TestDoubleBarrierOption {
     }
 
     @Test
-    public void validateDigitalCall(){
+    public void validateDoubleBarrierCall(){
         String[][] table = new String[2][];
-        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "二值期权收益"};
-        table[1] = new String[]{"DigitalOption", "2019-02-28", "2020-02-28", "100.0", "Act365", "SH000300", "2020-02-28", "Analytical", "看涨", "人民币", "1", "1.0"};
+        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "低障碍", "高障碍", "敲出补偿", "敲入基础票息"};
+        table[1] = new String[]{"DoubleBarrierOption", "2020-03-01", "2021-03-01", "1.05", "Act365", "SH000300", "2021-03-01", "Analytical", "看涨", "人民币", "1000000.0", "0.75", "1.25", "0.00", "0.00"};
 
         String[][] mktData = new String[5][2];
         mktData[0][0]= MktDataType.RiskfreeRate.name();
@@ -38,7 +38,7 @@ public class TestDoubleBarrierOption {
         mktData[1][1] = "0.02";
 
         mktData[2][0]= MktDataType.S0.name();
-        mktData[2][1] = "102.0";
+        mktData[2][1] = "1.0";
 
         mktData[3][0]= MktDataType.Vol.name();
         mktData[3][1] = "0.2";
@@ -58,7 +58,7 @@ public class TestDoubleBarrierOption {
     }
 
     @Test
-    public void validateDigitalPut(){
+    public void validateDoubleBarrierPut(){
         String[][] table = new String[2][];
 
         table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "二值期权收益"};

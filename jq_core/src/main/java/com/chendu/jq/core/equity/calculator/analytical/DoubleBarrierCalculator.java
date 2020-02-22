@@ -47,8 +47,8 @@ class BarrierOptionPvPricer {
         Double exerciseInYears = barrierOption.getDayCount().yearFraction(jqMarket.getMktDate(), exerciseDate);
 
         _optionType = barrierOption.optionDirection;
-        _rebate = barrierOption.getRebate();
-        _coupon = barrierOption.getCoupon();
+        _rebate = barrierOption.getKoRebate();
+        _coupon = barrierOption.getKiCoupon();
         _K = barrierOption.getStrike();
         _S = spotPrice;
         _T = exerciseInYears;

@@ -19,8 +19,8 @@ import java.util.List;
 
 @Data
 public class DoubleBarrierOption extends Option {
-    private Double rebate;
-    private Double coupon;
+    private Double koRebate;
+    private Double kiCoupon;
     private Double lBarrier;
     private Double uBarrier;
 
@@ -83,8 +83,8 @@ public class DoubleBarrierOption extends Option {
         doubleBarrierOption.setDomCurrency(Currency.Cny);
         doubleBarrierOption.setLBarrier(900.0);
         doubleBarrierOption.setUBarrier(1100.0);
-        doubleBarrierOption.setRebate(0.025);
-        doubleBarrierOption.setCoupon(0.03);
+        doubleBarrierOption.setKoRebate(0.025);
+        doubleBarrierOption.setKiCoupon(0.03);
         doubleBarrierOption.setValuationModel(ValuationModel.Analytical);
         return JqTrade.templateTradeData(DoubleBarrierOption.class, doubleBarrierOption);
     }
