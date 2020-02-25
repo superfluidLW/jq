@@ -12,10 +12,128 @@ import java.time.LocalDate;
 public class DoubleBarrierCalculator extends OptionCalculator {
     @Override
     public Double calcPv(JqTrade trade, JqMarket jqMarket){
-        BarrierOptionPvPricer barrierOptionPvPricer = new BarrierOptionPvPricer((DoubleBarrierOption) trade, jqMarket);
-        return barrierOptionPvPricer.Pv();
+        BarrierOptionFourierPvPricer pvPricer = new BarrierOptionFourierPvPricer((DoubleBarrierOption) trade, jqMarket);
+        return pvPricer.Pv()*trade.notional;
     }
 }
+
+class BarrierOptionFourierPvPricer
+{
+    public static NormalDistribution normal = new NormalDistribution(0.0, 1.0);
+    private OptionDirection _optionType;
+
+    private double _S;	// spot price
+    private double _K;	// strike
+    private double _A;	// barrier, lower barrier in case of double barrier option
+    private double _B; // upper barrier in case of double barrier option
+    private double _T;	// maturity in years
+    private double _r; // insterest rate
+    private double _v; // vol
+
+    private double b;
+    private double a;
+    private double x0;
+    private double v2;
+    private double u;
+    private double u2;
+
+    private double _rebate;
+    private double _coupon;
+
+    public BarrierOptionFourierPvPricer(DoubleBarrierOption barrierOption, JqMarket jqMarket)
+    {
+        LocalDate exerciseDate = barrierOption.getExerciseDates().get(0);
+        Double exerciseTime = barrierOption.getDayCount().yearFraction(jqMarket.getMktDate(), exerciseDate);
+        Double riskFreeRate = jqMarket.jqCurve(barrierOption.getDomCurrency()).getZeroRate(exerciseTime);
+        Double spotPrice = jqMarket.tickerPrice(barrierOption.getUnderlyingTicker());
+        Double vol = jqMarket.tickerVol(barrierOption.getUnderlyingTicker());
+        Double exerciseInYears = barrierOption.getDayCount().yearFraction(jqMarket.getMktDate(), exerciseDate);
+
+        _optionType = barrierOption.optionDirection;
+        _rebate = barrierOption.getKoRebate();
+        _coupon = barrierOption.getKiCoupon();
+        _K = barrierOption.getStrike();
+        _S = spotPrice;
+        _T = exerciseInYears;
+        _v = vol;
+        _r = riskFreeRate;
+        _B = barrierOption.getUBarrier();
+        _A = barrierOption.getLBarrier();
+
+        b = Math.log(_B);
+        a = Math.log(_A);
+        x0 = Math.log(_S);
+        v2 = Math.pow(_v, 2);
+        u = _r - v2 / 2;
+        u2 = Math.pow(u, 2);
+    }
+
+    public double Pv()
+    {
+        Double q = Q(0, b)- Q(0, a);
+        Double rebate = (1 - q) * _rebate;
+        Double coupon = q * _coupon;
+        switch (_optionType)
+        {
+            case Call:
+                return  Math.exp(-_r * _T) * (CallCalc() + rebate + coupon);
+            case Put:
+                return Math.exp(-_r * _T) * (PutCalc() + coupon + coupon);
+        }
+        return Double.NaN;
+    }
+
+    private double CallCalc()
+    {
+        Double result = 0.0;
+        if (_K < _B)
+        {
+            Double y = Math.max(a, Math.log(_K));
+            Double e = (Q(1, b) - Q(1, y));
+            Double d = _K*(Q(0, b) - Q(0, y));
+
+            result = e - d;
+        }
+        return result;
+    }
+
+    private double PutCalc()
+    {
+        Double result = 0.0;
+        if (_K > _A)
+        {
+            Double y = Math.min(b, Math.log(_K));
+            Double e = _K * (Q(0, y) - Q(0, a));
+            Double d = Q(1, y) - Q(1, a);
+
+            result = e - d;
+        }
+        return result;
+    }
+
+    private double Q(double lambda, double x)
+    {
+        Double tmp1 = lambda + u/v2;
+        Double tmp2 = Math.PI/(b - a);
+
+        Double result = 0.0;
+        Integer n = 1;
+        Double newTerm = 1.0e100;
+        while (Math.abs(newTerm) > 1e-28)
+        {
+            newTerm = tmp1*Math.sin(n*tmp2*(x - a)) - n*tmp2*Math.cos(n*tmp2*(x - a));
+            newTerm *= Math.sin(n*tmp2*(x0 - a));
+            newTerm /= tmp1*tmp1 + n*n*tmp2*tmp2;
+            newTerm *= Math.exp(-n*n*tmp2*tmp2*v2*_T/2);
+            result += newTerm;
+            n ++;
+        }
+
+        result *= (2/(b - a))*Math.exp(-u*x0/v2 - u2*_T/(2*v2) + tmp1*x);
+        return result;
+    }
+}
+
 
 class BarrierOptionPvPricer {
     public static NormalDistribution normal = new NormalDistribution(0.0, 1.0);

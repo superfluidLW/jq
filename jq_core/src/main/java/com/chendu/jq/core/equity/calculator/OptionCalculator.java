@@ -28,7 +28,7 @@ public abstract class OptionCalculator implements ICalculator {
             return jqResult;
         }
 
-        Double deltaSpot = 0.01;
+        Double deltaSpot = jqMarket.tickerPrice(((Option)trade).getUnderlyingTicker()) / 10000.0;
         jqMarket.updateActions(option.bumpSpot(deltaSpot));
         Double pvSpotUp = calcPv(option, jqMarket);
         jqMarket.updateActions(option.bumpSpot(-deltaSpot));

@@ -7,6 +7,7 @@ import com.chendu.jq.core.common.dayCount.DayCount;
 import com.chendu.jq.core.common.jqEnum.*;
 import com.chendu.jq.core.equity.calculator.analytical.DoubleBarrierCalculator;
 import com.chendu.jq.core.equity.calculator.mc.MonteCarloCalculator;
+import com.chendu.jq.core.equity.calculator.mc.MonteCarloDKoCalculator;
 import com.chendu.jq.core.market.JqMarket;
 import com.chendu.jq.core.market.mktObj.JqTicker;
 import com.chendu.jq.core.util.JsonUtils;
@@ -16,13 +17,14 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class DoubleBarrierOption extends Option {
-    private Double koRebate;
-    private Double kiCoupon;
-    private Double lBarrier;
-    private Double uBarrier;
+    public Double koRebate;
+    public Double kiCoupon;
+    public Double lBarrier;
+    public Double uBarrier;
 
     public DoubleBarrierOption(){
         super();
@@ -33,6 +35,7 @@ public class DoubleBarrierOption extends Option {
     public Option bumpMaturity(int offset) {
         DoubleBarrierOption vo = JsonUtils.readValue(JsonUtils.writeValueAsString(this), DoubleBarrierOption.class);
         vo.setMaturityDate(this.maturityDate.plusDays(offset));
+        vo.setExerciseDates(this.exerciseDates.stream().map(d -> d.plusDays(offset)).collect(Collectors.toList()));
         return vo;
     }
 
@@ -53,7 +56,7 @@ public class DoubleBarrierOption extends Option {
         JqResult jqResult = new JqResult();
 
         if(valuationModel == ValuationModel.MonteCarlo){
-            MonteCarloCalculator mc = new MonteCarloCalculator();
+            MonteCarloDKoCalculator mc = new MonteCarloDKoCalculator(300, 10000);
             return mc.calc(this, jqMarket);
         }
         else if(valuationModel == ValuationModel.Analytical){

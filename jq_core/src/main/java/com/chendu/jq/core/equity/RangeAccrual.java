@@ -21,7 +21,7 @@ import java.util.List;
 
 @Data
 public class RangeAccrual extends Option {
-    private Double digitalPayoff;
+    public Double digitalPayoff;
 
     public RangeAccrual(){
         super();

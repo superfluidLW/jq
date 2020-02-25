@@ -28,14 +28,14 @@ public class TestDoubleBarrierOption {
     public void validateDoubleBarrierCall(){
         String[][] table = new String[2][];
         table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "低障碍", "高障碍", "敲出补偿", "敲入基础票息"};
-        table[1] = new String[]{"DoubleBarrierOption", "2020-03-01", "2021-03-01", "1.05", "Act365", "SH000300", "2021-03-01", "Analytical", "看涨", "人民币", "1000000.0", "0.75", "1.25", "0.00", "0.00"};
+        table[1] = new String[]{"DoubleBarrierOption", "2020-03-01", "2021-03-01", "1.05", "Act365", "SH000300", "2021-03-01", "Analytical", "看涨", "人民币", "1.0", "0.75", "1.25", "0.00", "0.00"};
 
         String[][] mktData = new String[5][2];
         mktData[0][0]= MktDataType.RiskfreeRate.name();
-        mktData[0][1] = "0.05";
+        mktData[0][1] = "0.03";
 
         mktData[1][0]= MktDataType.DividendRate.name();
-        mktData[1][1] = "0.02";
+        mktData[1][1] = "0.00";
 
         mktData[2][0]= MktDataType.S0.name();
         mktData[2][1] = "1.0";
@@ -44,77 +44,108 @@ public class TestDoubleBarrierOption {
         mktData[3][1] = "0.2";
 
         mktData[4][0]= MktDataType.MktDate.name();
-        mktData[4][1] = "2019-02-28";
+        mktData[4][1] = "2020-03-01";
 
         JqResult jqResult = XlFunc.jqCalc(XlFunc.transpose(table), mktData);
 
         System.out.println(JsonUtils.writeValueAsString(jqResult));
-        assert Math.abs(jqResult.getPv() - 0.531954) < 1.0e-6;
-        assert Math.abs(jqResult.getDelta() - 0.018397) < 2.0e-6;
-        assert Math.abs(jqResult.getGamma() - (-0.000315)) < 1.0e-6;
-        assert Math.abs(jqResult.getRho() - 0.00013439) < 1.0e-5;
-        assert Math.abs(jqResult.getVega() - (-0.006560)) < 1.0e-6;
-        assert Math.abs(jqResult.getTheta() - (0.0000981)) < 1.0e-6;
+        assert Math.abs(jqResult.getPv() - 0.010845) < 1.0e-6;
+        assert Math.abs(jqResult.getDelta() - 0.005738) < 1e-6;
+        assert Math.abs(jqResult.getGamma() - (-0.487205)) < 1.0e-6;
+        assert Math.abs(jqResult.getRho() - 0.00000241) < 1.0e-5;
+        assert Math.abs(jqResult.getVega() - (-0.001063)) < 1.0e-6;
+        assert Math.abs(jqResult.getTheta() - (0.000027)) < 1.0e-6;
     }
 
     @Test
     public void validateDoubleBarrierPut(){
         String[][] table = new String[2][];
-
-        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "二值期权收益"};
-        table[1] = new String[]{"DigitalOption", "2019-02-28", "2020-02-28", "100.0", "Act365", "SH000300", "2020-02-28", "Analytical", "看跌", "人民币", "1", "1.0"};
+        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "低障碍", "高障碍", "敲出补偿", "敲入基础票息"};
+        table[1] = new String[]{"DoubleBarrierOption", "2020-03-01", "2021-03-01", "1.05", "Act365", "SH000300", "2021-03-01", "Analytical", "看跌", "人民币", "1.0", "0.75", "1.25", "0.00", "0.00"};
 
         String[][] mktData = new String[5][2];
         mktData[0][0]= MktDataType.RiskfreeRate.name();
-        mktData[0][1] = "0.05";
+        mktData[0][1] = "0.03";
 
         mktData[1][0]= MktDataType.DividendRate.name();
-        mktData[1][1] = "0.02";
+        mktData[1][1] = "0.00";
 
         mktData[2][0]= MktDataType.S0.name();
-        mktData[2][1] = "102.0";
+        mktData[2][1] = "1.0";
 
         mktData[3][0]= MktDataType.Vol.name();
         mktData[3][1] = "0.2";
 
         mktData[4][0]= MktDataType.MktDate.name();
-        mktData[4][1] = "2019-02-28";
+        mktData[4][1] = "2020-03-01";
 
         JqResult jqResult = XlFunc.jqCalc(XlFunc.transpose(table), mktData);
-        assert Math.abs(jqResult.getPv() - 0.419275) < 1.0e-6;
-        assert Math.abs(jqResult.getDelta() - (-0.018397)) < 2.0e-6;
-        assert Math.abs(jqResult.getGamma() - 0.000315) < 1.0e-6;
-        assert Math.abs(jqResult.getRho() - (-0.00022952)) < 1.0e-6;
-        assert Math.abs(jqResult.getVega() - 0.006560) < 1.0e-6;
-        assert Math.abs(jqResult.getTheta() - (0.000032)) < 1.0e-6;
+
+        System.out.println(JsonUtils.writeValueAsString(jqResult));
+        assert Math.abs(jqResult.getPv() - 0.049021) < 1.0e-6;
+        assert Math.abs(jqResult.getDelta() - (-0.136558)) < 1e-6;
+        assert Math.abs(jqResult.getGamma() - (-1.397878)) < 1.0e-6;
+        assert Math.abs(jqResult.getRho() - (-0.0000215)) < 1.0e-6;
+        assert Math.abs(jqResult.getVega() - (-0.002692)) < 1.0e-6;
+        assert Math.abs(jqResult.getTheta() - (0.000092)) < 1.0e-6;
     }
 
 
     @Test
-    public void validateDigitalCallMc(){
+    public void validateDoubleBarrierPutMc(){
         String[][] table = new String[2][];
-        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "蒙特卡洛样本量", "计算MC希腊值", "期权方向", "本币币种", "名义面额", "二值期权收益"};
-        table[1] = new String[]{"DigitalOption", "2019-02-28", "2020-02-28", "100.0", "Act365", "SH000300", "2020-02-28", "MonteCarlo", "25000", "false", "看涨", "人民币", "1", "1.0"};
+        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "低障碍", "高障碍", "敲出补偿", "敲入基础票息"};
+        table[1] = new String[]{"DoubleBarrierOption", "2020-03-01", "2021-03-01", "1.05", "Act365", "SH000300", "2021-03-01", "MonteCarlo", "看跌", "人民币", "1.0", "0.75", "1.25", "0.00", "0.00"};
 
         String[][] mktData = new String[5][2];
         mktData[0][0]= MktDataType.RiskfreeRate.name();
-        mktData[0][1] = "0.05";
+        mktData[0][1] = "0.03";
 
         mktData[1][0]= MktDataType.DividendRate.name();
-        mktData[1][1] = "0.02";
+        mktData[1][1] = "0.00";
 
         mktData[2][0]= MktDataType.S0.name();
-        mktData[2][1] = "102.0";
+        mktData[2][1] = "1.0";
 
         mktData[3][0]= MktDataType.Vol.name();
         mktData[3][1] = "0.2";
 
         mktData[4][0]= MktDataType.MktDate.name();
-        mktData[4][1] = "2019-02-28";
+        mktData[4][1] = "2020-03-01";
 
         JqResult jqResult = XlFunc.jqCalc(XlFunc.transpose(table), mktData);
+
         System.out.println(JsonUtils.writeValueAsString(jqResult));
-        assert Math.abs(jqResult.getPv() - 0.531954) < 0.01;
+        assert Math.abs(jqResult.getPv() - 0.049021) < 1e-3;
+    }
+
+
+    @Test
+    public void validateDoubleBarrierCallMc(){
+        String[][] table = new String[2][];
+        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "低障碍", "高障碍", "敲出补偿", "敲入基础票息"};
+        table[1] = new String[]{"DoubleBarrierOption", "2020-03-01", "2021-03-01", "1.05", "Act365", "SH000300", "2021-03-01", "MonteCarlo", "看涨", "人民币", "1.0", "0.75", "1.25", "0.00", "0.00"};
+
+        String[][] mktData = new String[5][2];
+        mktData[0][0]= MktDataType.RiskfreeRate.name();
+        mktData[0][1] = "0.03";
+
+        mktData[1][0]= MktDataType.DividendRate.name();
+        mktData[1][1] = "0.00";
+
+        mktData[2][0]= MktDataType.S0.name();
+        mktData[2][1] = "1.0";
+
+        mktData[3][0]= MktDataType.Vol.name();
+        mktData[3][1] = "0.2";
+
+        mktData[4][0]= MktDataType.MktDate.name();
+        mktData[4][1] = "2020-03-01";
+
+        JqResult jqResult = XlFunc.jqCalc(XlFunc.transpose(table), mktData);
+
+        System.out.println(JsonUtils.writeValueAsString(jqResult));
+        assert Math.abs(jqResult.getPv() - 0.010845) < 1.0e-3;
     }
 
     @Test
