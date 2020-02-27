@@ -42,7 +42,7 @@ class BarrierOptionFourierPvPricer
 
     public BarrierOptionFourierPvPricer(DoubleBarrierOption barrierOption, JqMarket jqMarket)
     {
-        LocalDate exerciseDate = barrierOption.getExerciseDates().get(0);
+        LocalDate exerciseDate = barrierOption.getExerciseDate();
         Double exerciseTime = barrierOption.getDayCount().yearFraction(jqMarket.getMktDate(), exerciseDate);
         Double riskFreeRate = jqMarket.jqCurve(barrierOption.getDomCurrency()).getZeroRate(exerciseTime);
         Double spotPrice = jqMarket.tickerPrice(barrierOption.getUnderlyingTicker());
@@ -157,7 +157,7 @@ class BarrierOptionPvPricer {
     private double _coupon;
 
     public BarrierOptionPvPricer(DoubleBarrierOption barrierOption, JqMarket jqMarket) {
-        LocalDate exerciseDate = barrierOption.getExerciseDates().get(0);
+        LocalDate exerciseDate = barrierOption.getExerciseDate();
         Double exerciseTime = barrierOption.getDayCount().yearFraction(jqMarket.getMktDate(), exerciseDate);
         Double riskFreeRate = jqMarket.jqCurve(barrierOption.getDomCurrency()).getZeroRate(exerciseTime);
         Double spotPrice = jqMarket.tickerPrice(barrierOption.getUnderlyingTicker());

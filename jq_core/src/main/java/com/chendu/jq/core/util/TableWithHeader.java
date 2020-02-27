@@ -5,11 +5,13 @@ import com.chendu.jq.core.common.dayCount.DayCount;
 import com.chendu.jq.core.common.jqEnum.*;
 import com.chendu.jq.core.equity.DigitalOption;
 import com.chendu.jq.core.equity.DoubleBarrierOption;
+import com.chendu.jq.core.equity.RangeAccrual;
 import com.chendu.jq.core.equity.VanillaOption;
 import com.chendu.jq.core.market.mktObj.JqTicker;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.Data;
+import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Constructor;
@@ -69,6 +71,8 @@ public class TableWithHeader {
                     trade = toClass(VanillaOption.class, i);
                     break;
                 case RangeAccrual:
+                    trade = toClass(RangeAccrual.class, i);
+                    break;
                 case DigitalOption:
                     trade = toClass(DigitalOption.class, i);
                     break;
@@ -147,6 +151,13 @@ public class TableWithHeader {
                     dates.add(JqParser.jqDateFromStr(dateStr));
                 }
                 value = dates;
+            }
+            else if(genericType.equals(new TypeReference<List<Double>>(){}.getType())){
+                List<Double> values = new ArrayList<>();
+                for (String valStr:val.split(JqConstant.delim)) {
+                    values.add(Double.parseDouble(valStr));
+                }
+                value = values;
             }
             else if(genericType.equals(JqTicker.class)){
                 value = new JqTicker(val);

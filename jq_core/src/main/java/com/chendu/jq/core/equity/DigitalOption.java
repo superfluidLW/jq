@@ -31,7 +31,7 @@ public class DigitalOption extends Option {
     public Option bumpMaturity(int offset) {
         DigitalOption vo = JsonUtils.readValue(JsonUtils.writeValueAsString(this), DigitalOption.class);
         vo.setMaturityDate(this.maturityDate.plusDays(offset));
-        vo.setExerciseDates(this.exerciseDates.stream().map(d -> d.plusDays(offset)).collect(Collectors.toList()));
+        vo.setExerciseDate(exerciseDate.plusDays(offset));
         return vo;
     }
 
@@ -42,7 +42,6 @@ public class DigitalOption extends Option {
 
     @Override
     public Double calcPayOff(LinkedHashMap<LocalDate, Double> path) {
-        LocalDate exerciseDate = exerciseDates.get(0);
         Double price = path.get(exerciseDate);
         return optionDirection == OptionDirection.Call ? (price>strike ? notional : 0.0) : (price < strike ? notional : 0.0);
     }
@@ -73,8 +72,7 @@ public class DigitalOption extends Option {
         DigitalOption digitalOption = new DigitalOption();
         digitalOption.setStartDate(LocalDate.now());
         digitalOption.setMaturityDate(LocalDate.now().plusYears(1));
-        digitalOption.setExerciseDates(Arrays.asList(LocalDate.now().plusYears(1)));
-        digitalOption.setObserveDates(Arrays.asList(LocalDate.now().plusYears(1)));
+        digitalOption.setExerciseDate(LocalDate.now().plusYears(1));
         digitalOption.setStrike(1000.0);
         digitalOption.setOptionDirection(OptionDirection.Call);
         digitalOption.setUnderlyingTicker(new JqTicker("SH000300"));

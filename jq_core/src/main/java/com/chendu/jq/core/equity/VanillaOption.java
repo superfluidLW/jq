@@ -16,7 +16,6 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 public class VanillaOption extends Option {
@@ -29,7 +28,7 @@ public class VanillaOption extends Option {
     public Option bumpMaturity(int offset) {
         VanillaOption vo = JsonUtils.readValue(JsonUtils.writeValueAsString(this), VanillaOption.class);
         vo.setMaturityDate(this.maturityDate.plusDays(offset));
-        vo.setExerciseDates(exerciseDates.stream().map(e -> e.plusDays(offset)).collect(Collectors.toList()));
+        vo.setExerciseDate(exerciseDate.plusDays(offset));
         return vo;
     }
 
@@ -49,7 +48,6 @@ public class VanillaOption extends Option {
 
     @Override
     public Double calcPayOff(LinkedHashMap<LocalDate, Double> path) {
-        LocalDate exerciseDate = exerciseDates.get(0);
         Double price = path.get(exerciseDate);
         return optionDirection == OptionDirection.Call ? Math.max(price-strike, 0.0) : Math.max(strike-price, 0.0);
     }
@@ -76,8 +74,7 @@ public class VanillaOption extends Option {
         VanillaOption vanillaOption = new VanillaOption();
         vanillaOption.setStartDate(LocalDate.now());
         vanillaOption.setMaturityDate(LocalDate.now().plusYears(1));
-        vanillaOption.setExerciseDates(Arrays.asList(LocalDate.now().plusYears(1)));
-        vanillaOption.setObserveDates(Arrays.asList(LocalDate.now().plusYears(1)));
+        vanillaOption.setExerciseDate(LocalDate.now().plusYears(1));
         vanillaOption.setStrike(1000.0);
         vanillaOption.setOptionDirection(OptionDirection.Call);
         vanillaOption.setUnderlyingTicker(new JqTicker("SH000300"));

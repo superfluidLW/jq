@@ -13,7 +13,7 @@ public class EuropeanVanillaCalculator extends OptionCalculator {
     public Double calcPv(JqTrade trade, JqMarket jqMarket){
         VanillaOption vanillaOption = (VanillaOption) trade;
 
-        LocalDate exerciseDate = vanillaOption.getExerciseDates().get(0);
+        LocalDate exerciseDate = vanillaOption.getExerciseDate();
         LocalDate maturityDate = vanillaOption.getMaturityDate();
 
         Double exerciseTime = vanillaOption.getDayCount().yearFraction(jqMarket.getMktDate(), exerciseDate);

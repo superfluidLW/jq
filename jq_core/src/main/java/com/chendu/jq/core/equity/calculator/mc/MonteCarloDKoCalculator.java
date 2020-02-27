@@ -26,7 +26,7 @@ public class MonteCarloDKoCalculator extends OptionCalculator {
     DoubleBarrierOption option = (DoubleBarrierOption)trade;
     Double strike = option.getStrike();
     Double spot = jqMarket.tickerPrice(option.getUnderlyingTicker());
-    LocalDate exerciseDate = option.getExerciseDates().get(0);
+    LocalDate exerciseDate = ((DoubleBarrierOption) trade).exerciseDate;
     Double volatility = jqMarket.tickerVol(option.getUnderlyingTicker());
 
     Double yearFrac = option.getDayCount().yearFraction(jqMarket.getMktDate(), exerciseDate);

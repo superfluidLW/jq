@@ -6,7 +6,6 @@ import com.chendu.jq.core.common.JqResult;
 import com.chendu.jq.core.common.dayCount.DayCount;
 import com.chendu.jq.core.common.jqEnum.*;
 import com.chendu.jq.core.equity.calculator.analytical.DoubleBarrierCalculator;
-import com.chendu.jq.core.equity.calculator.mc.MonteCarloCalculator;
 import com.chendu.jq.core.equity.calculator.mc.MonteCarloDKoCalculator;
 import com.chendu.jq.core.market.JqMarket;
 import com.chendu.jq.core.market.mktObj.JqTicker;
@@ -17,7 +16,6 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 public class DoubleBarrierOption extends Option {
@@ -35,7 +33,7 @@ public class DoubleBarrierOption extends Option {
     public Option bumpMaturity(int offset) {
         DoubleBarrierOption vo = JsonUtils.readValue(JsonUtils.writeValueAsString(this), DoubleBarrierOption.class);
         vo.setMaturityDate(this.maturityDate.plusDays(offset));
-        vo.setExerciseDates(this.exerciseDates.stream().map(d -> d.plusDays(offset)).collect(Collectors.toList()));
+        vo.setExerciseDate(this.exerciseDate.plusDays(offset));
         return vo;
     }
 
@@ -46,9 +44,7 @@ public class DoubleBarrierOption extends Option {
 
     @Override
     public Double calcPayOff(LinkedHashMap<LocalDate, Double> path) {
-        LocalDate exerciseDate = exerciseDates.get(0);
-        Double price = path.get(exerciseDate);
-        return optionDirection == OptionDirection.Call ? (price>strike ? notional : 0.0) : (price < strike ? notional : 0.0);
+        return null;
     }
 
     @Override
@@ -77,8 +73,7 @@ public class DoubleBarrierOption extends Option {
         DoubleBarrierOption doubleBarrierOption = new DoubleBarrierOption();
         doubleBarrierOption.setStartDate(LocalDate.now());
         doubleBarrierOption.setMaturityDate(LocalDate.now().plusYears(1));
-        doubleBarrierOption.setExerciseDates(Arrays.asList(LocalDate.now().plusYears(1)));
-        doubleBarrierOption.setObserveDates(Arrays.asList(LocalDate.now().plusYears(1)));
+        doubleBarrierOption.setExerciseDate(LocalDate.now().plusYears(1));
         doubleBarrierOption.setOptionDirection(OptionDirection.Call);
         doubleBarrierOption.setUnderlyingTicker(new JqTicker("SH000300"));
         doubleBarrierOption.setDayCount(new DayCount(DayCountType.Act365));

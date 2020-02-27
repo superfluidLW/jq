@@ -25,10 +25,10 @@ public class TestRangeAccrual {
     }
 
     @Test
-    public void validateDigitalCall(){
+    public void validateRangeAccrual(){
         String[][] table = new String[2][];
-        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "二值期权收益"};
-        table[1] = new String[]{"DigitalOption", "2019-02-28", "2020-02-28", "100.0", "Act365", "SH000300", "2020-02-28", "Analytical", "看涨", "人民币", "1", "1.0"};
+        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "计息基准", "标的资产编码", "行权日期", "估值方法", "本币币种", "名义面额", "区间下限", "区间上限", "票息"};
+        table[1] = new String[]{"RangeAccrual", "2020-03-01", "2021-03-01", "Act365", "SH000300", "2021-03-01", "Analytical", "人民币", "1.0", "3000.0", "3050.0", "0.025"};
 
         String[][] mktData = new String[5][2];
         mktData[0][0]= MktDataType.RiskfreeRate.name();
@@ -38,18 +38,18 @@ public class TestRangeAccrual {
         mktData[1][1] = "0.02";
 
         mktData[2][0]= MktDataType.S0.name();
-        mktData[2][1] = "102.0";
+        mktData[2][1] = "3008.0";
 
         mktData[3][0]= MktDataType.Vol.name();
         mktData[3][1] = "0.2";
 
         mktData[4][0]= MktDataType.MktDate.name();
-        mktData[4][1] = "2019-02-28";
+        mktData[4][1] = "2020-03-01";
 
         JqResult jqResult = XlFunc.jqCalc(XlFunc.transpose(table), mktData);
 
         System.out.println(JsonUtils.writeValueAsString(jqResult));
-        assert Math.abs(jqResult.getPv() - 0.531954) < 1.0e-6;
+        assert Math.abs(jqResult.getPv() - 0.001515) < 1.0e-6;
         assert Math.abs(jqResult.getDelta() - 0.018397) < 2.0e-6;
         assert Math.abs(jqResult.getGamma() - (-0.000315)) < 1.0e-6;
         assert Math.abs(jqResult.getRho() - 0.00013439) < 1.0e-5;
@@ -58,11 +58,10 @@ public class TestRangeAccrual {
     }
 
     @Test
-    public void validateDigitalPut(){
+    public void validateRangeAccrualMc(){
         String[][] table = new String[2][];
-
-        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "二值期权收益"};
-        table[1] = new String[]{"DigitalOption", "2019-02-28", "2020-02-28", "100.0", "Act365", "SH000300", "2020-02-28", "Analytical", "看跌", "人民币", "1", "1.0"};
+        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "计息基准", "标的资产编码", "行权日期", "估值方法", "蒙特卡洛样本量", "本币币种", "名义面额", "区间下限", "区间上限", "票息"};
+        table[1] = new String[]{"RangeAccrual", "2020-03-01", "2021-03-01", "Act365", "SH000300", "2021-03-01", "MonteCarlo", "50000", "人民币", "1.0", "3000.0", "3050.0", "0.025"};
 
         String[][] mktData = new String[5][2];
         mktData[0][0]= MktDataType.RiskfreeRate.name();
@@ -72,45 +71,13 @@ public class TestRangeAccrual {
         mktData[1][1] = "0.02";
 
         mktData[2][0]= MktDataType.S0.name();
-        mktData[2][1] = "102.0";
+        mktData[2][1] = "3008.0";
 
         mktData[3][0]= MktDataType.Vol.name();
         mktData[3][1] = "0.2";
 
         mktData[4][0]= MktDataType.MktDate.name();
-        mktData[4][1] = "2019-02-28";
-
-        JqResult jqResult = XlFunc.jqCalc(XlFunc.transpose(table), mktData);
-        assert Math.abs(jqResult.getPv() - 0.419275) < 1.0e-6;
-        assert Math.abs(jqResult.getDelta() - (-0.018397)) < 2.0e-6;
-        assert Math.abs(jqResult.getGamma() - 0.000315) < 1.0e-6;
-        assert Math.abs(jqResult.getRho() - (-0.00022952)) < 1.0e-6;
-        assert Math.abs(jqResult.getVega() - 0.006560) < 1.0e-6;
-        assert Math.abs(jqResult.getTheta() - (0.000032)) < 1.0e-6;
-    }
-
-
-    @Test
-    public void validateDigitalCallMc(){
-        String[][] table = new String[2][];
-        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "蒙特卡洛样本量", "计算MC希腊值", "期权方向", "本币币种", "名义面额", "二值期权收益"};
-        table[1] = new String[]{"DigitalOption", "2019-02-28", "2020-02-28", "100.0", "Act365", "SH000300", "2020-02-28", "MonteCarlo", "25000", "false", "看涨", "人民币", "1", "1.0"};
-
-        String[][] mktData = new String[5][2];
-        mktData[0][0]= MktDataType.RiskfreeRate.name();
-        mktData[0][1] = "0.05";
-
-        mktData[1][0]= MktDataType.DividendRate.name();
-        mktData[1][1] = "0.02";
-
-        mktData[2][0]= MktDataType.S0.name();
-        mktData[2][1] = "102.0";
-
-        mktData[3][0]= MktDataType.Vol.name();
-        mktData[3][1] = "0.2";
-
-        mktData[4][0]= MktDataType.MktDate.name();
-        mktData[4][1] = "2019-02-28";
+        mktData[4][1] = "2020-03-01";
 
         JqResult jqResult = XlFunc.jqCalc(XlFunc.transpose(table), mktData);
         System.out.println(JsonUtils.writeValueAsString(jqResult));
@@ -125,13 +92,12 @@ public class TestRangeAccrual {
 
     @Test
     public void TestTradeConversion(){
-        String[][] table = new String[3][];
-        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额"};
-        table[1] = new String[]{"DigitalOption", "2019-02-28", "2020-02-28", "100.605", "Act360", "SZ300000", "2020-02-08", "Analytical", "看涨", "人民币", "1"};
-        table[2] = new String[]{"DigitalOption", "2019-02-28", "2021-02-28", "100.1", "Act365", "SH000001", "2020-02-08", "Analytical", "看涨", "人民币", "1"};
+        String[][] table = new String[2][];
+        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "计息基准", "标的资产编码", "行权日期", "估值方法", "本币币种", "名义面额", "区间下限", "区间上限", "票息"};
+        table[1] = new String[]{"RangeAccrual", "2020-03-01", "2021-03-01", "Act365", "SH000300", "2021-03-01", "Analytical", "人民币", "1.0", "3000.0", "3050.0", "0.025"};
         TableWithHeader twh = new TableWithHeader(table);
 
         List<JqTrade> vos = twh.toTrades();
-        assert vos.size() == 2;
+        assert vos.size() == 1;
     }
 }

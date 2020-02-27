@@ -4,8 +4,12 @@ import com.chendu.jq.core.common.jqEnum.BizDayAdjust;
 import com.chendu.jq.core.common.jqEnum.Venue;
 import lombok.Data;
 
+import java.awt.image.AreaAveragingScaleFilter;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 @Data
 public class JqCalendar {
@@ -21,7 +25,22 @@ public class JqCalendar {
         this.holidays = holidays;
     }
 
+
+    public List<LocalDate> BizDateBetweenDates(LocalDate start, LocalDate end){
+        List<LocalDate> bizDates = new ArrayList<>();
+        for(LocalDate date = start; date.isBefore(end); date = date.plusDays(1)){
+            if(isBizDay(date)){
+                bizDates.add(LocalDate.from(date));
+            }
+        }
+
+        return bizDates;
+    }
+
     public boolean isBizDay(LocalDate date){
+        if(holidays.isEmpty()){
+            return !(date.getDayOfWeek().equals(DayOfWeek.SATURDAY) || date.getDayOfWeek().equals(DayOfWeek.SUNDAY));
+        }
         return !holidays.contains(date);
     }
 

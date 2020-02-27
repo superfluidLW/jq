@@ -1,46 +1,60 @@
 package com.chendu.jq.core.equity.calculator.analytical;
 
 import com.chendu.jq.core.JqTrade;
-import com.chendu.jq.core.common.jqEnum.OptionDirection;
+import com.chendu.jq.core.common.JqCalendar;
+import com.chendu.jq.core.common.JqResult;
+import com.chendu.jq.core.common.dayCount.DayCount;
+import com.chendu.jq.core.common.jqEnum.*;
+import com.chendu.jq.core.equity.DigitalOption;
+import com.chendu.jq.core.equity.RangeAccrual;
 import com.chendu.jq.core.equity.VanillaOption;
 import com.chendu.jq.core.equity.calculator.OptionCalculator;
 import com.chendu.jq.core.market.JqMarket;
+import com.chendu.jq.core.market.mktObj.JqTicker;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 public class RangeAccrualCalculator extends OptionCalculator {
+    public static EuropeanDigitalCalculator europeanDigitalCalculator = new EuropeanDigitalCalculator();
+
     @Override
     public Double calcPv(JqTrade trade, JqMarket jqMarket){
-        VanillaOption vanillaOption = (VanillaOption) trade;
+        RangeAccrual rangeAccrual = (RangeAccrual) trade;
 
-        LocalDate exerciseDate = vanillaOption.getExerciseDates().get(0);
-        LocalDate maturityDate = vanillaOption.getMaturityDate();
+        Double pv = 0.0;
+        List<LocalDate> obsDates = rangeAccrual.obsDates();
+        for (LocalDate date : obsDates) {
+            DigitalOption digitalOption1 = new DigitalOption();
+            digitalOption1.setStartDate(rangeAccrual.startDate);
+            digitalOption1.setMaturityDate(rangeAccrual.maturityDate);
+            digitalOption1.setExerciseDate(date);
+            digitalOption1.setStrike(rangeAccrual.lRange);
+            digitalOption1.setOptionDirection(OptionDirection.Call);
+            digitalOption1.setUnderlyingTicker(rangeAccrual.underlyingTicker);
+            digitalOption1.setDayCount(rangeAccrual.dayCount);
+            digitalOption1.setDigitalPayoff(1.0);
+            digitalOption1.setNotional(1.0);
+            digitalOption1.setDomCurrency(rangeAccrual.domCurrency);
+            digitalOption1.setValuationModel(ValuationModel.Analytical);
 
-        Double exerciseTime = vanillaOption.getDayCount().yearFraction(jqMarket.getMktDate(), exerciseDate);
-        Double maturityTime = vanillaOption.getDayCount().yearFraction(jqMarket.getMktDate(), maturityDate);
+            DigitalOption digitalOption2 = new DigitalOption();
+            digitalOption2.setStartDate(rangeAccrual.startDate);
+            digitalOption2.setMaturityDate(rangeAccrual.maturityDate);
+            digitalOption2.setExerciseDate(date);
+            digitalOption2.setStrike(rangeAccrual.uRange);
+            digitalOption2.setOptionDirection(OptionDirection.Call);
+            digitalOption2.setUnderlyingTicker(rangeAccrual.underlyingTicker);
+            digitalOption2.setDayCount(rangeAccrual.dayCount);
+            digitalOption2.setDigitalPayoff(1.0);
+            digitalOption2.setNotional(1.0);
+            digitalOption2.setDomCurrency(rangeAccrual.domCurrency);
+            digitalOption2.setValuationModel(ValuationModel.Analytical);
 
-        Double dfAtExercise = jqMarket.jqCurve(vanillaOption.getDomCurrency()).getDf(exerciseTime);
-        Double dividendDfAtExercise = jqMarket.getDividendCurveMap().get(vanillaOption.getUnderlyingTicker()).getDf(exerciseTime);
+            pv += (europeanDigitalCalculator.calcPv(digitalOption1, jqMarket) - europeanDigitalCalculator.calcPv(digitalOption2, jqMarket)) * rangeAccrual.coupon * rangeAccrual.notional;
+        }
 
-        Double dfAtMaturity = jqMarket.jqCurve(vanillaOption.getDomCurrency()).getDf(maturityTime);
-        Double dfExercise2Maturity = dfAtMaturity / dfAtExercise;
-
-        Double vol = jqMarket.tickerVol(vanillaOption.getUnderlyingTicker());
-        Double s0 = jqMarket.tickerPrice(vanillaOption.getUnderlyingTicker());
-        Double f = s0 * dividendDfAtExercise / dfAtExercise;
-
-        Double notional = vanillaOption.getNotional();
-        Double strike = vanillaOption.getStrike();
-
-        Double d1 = (Math.log(f / strike) + vol * vol / 2.0 * exerciseTime) / (vol * Math.sqrt(exerciseTime));
-        Double d2 = d1 - vol * Math.sqrt(exerciseTime);
-        Double nd1 = normal.cumulativeProbability(d1);
-        Double nd2 = normal.cumulativeProbability(d2);
-
-        OptionDirection optionDirection = vanillaOption.getOptionDirection();
-
-        return optionDirection == OptionDirection.Call
-                ? notional * dfExercise2Maturity * dfAtExercise * (f * nd1 - strike * nd2)
-                : notional * dfExercise2Maturity * dfAtExercise * (strike * (1 - nd2) - f * (1 - nd1));
+        return pv/obsDates.size();
     }
 }

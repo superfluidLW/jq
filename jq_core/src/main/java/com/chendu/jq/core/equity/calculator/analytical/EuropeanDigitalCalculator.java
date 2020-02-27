@@ -13,7 +13,7 @@ public class EuropeanDigitalCalculator extends OptionCalculator {
     public Double calcPv(JqTrade trade, JqMarket jqMarket) {
         DigitalOption digitalOption = (DigitalOption) trade;
 
-        LocalDate exerciseDate = digitalOption.getExerciseDates().get(0);
+        LocalDate exerciseDate = digitalOption.getExerciseDate();
         LocalDate maturityDate = digitalOption.getMaturityDate();
 
         Double exerciseTime = digitalOption.getDayCount().yearFraction(jqMarket.getMktDate(), exerciseDate);
