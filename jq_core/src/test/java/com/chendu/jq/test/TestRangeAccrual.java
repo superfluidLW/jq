@@ -50,11 +50,8 @@ public class TestRangeAccrual {
 
         System.out.println(JsonUtils.writeValueAsString(jqResult));
         assert Math.abs(jqResult.getPv() - 0.001515) < 1.0e-6;
-        assert Math.abs(jqResult.getDelta() - 0.018397) < 2.0e-6;
-        assert Math.abs(jqResult.getGamma() - (-0.000315)) < 1.0e-6;
-        assert Math.abs(jqResult.getRho() - 0.00013439) < 1.0e-5;
-        assert Math.abs(jqResult.getVega() - (-0.006560)) < 1.0e-6;
-        assert Math.abs(jqResult.getTheta() - (0.0000981)) < 1.0e-6;
+        assert Math.abs(jqResult.getDelta() - 0.0000016) < 2.0e-6;
+        assert Math.abs(jqResult.getGamma() - (-9.0e-8)) < 1.0e-6;
     }
 
     @Test
@@ -81,7 +78,7 @@ public class TestRangeAccrual {
 
         JqResult jqResult = XlFunc.jqCalc(XlFunc.transpose(table), mktData);
         System.out.println(JsonUtils.writeValueAsString(jqResult));
-        assert Math.abs(jqResult.getPv() - 0.531954) < 0.01;
+        assert Math.abs(jqResult.getPv() - 0.001515) < 1e-4;
     }
 
     @Test

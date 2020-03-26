@@ -73,7 +73,7 @@ public abstract class JqTrade implements Serializable {
 
         for (String tradelabel:JqTradeLabelSeq.tradeLabelSeq){
             if(fieldMap.containsKey(tradelabel.toLowerCase())){
-                template[i][0] = tradelabel;
+                template[i][0] = JqParser.enumFromStr(tradelabel, TradeLabel.class).getNameCn();
                 try {
                     Object value = fieldMap.get(tradelabel.toLowerCase()).get(trade);
                     Field field = fieldMap.get(tradelabel.toLowerCase());

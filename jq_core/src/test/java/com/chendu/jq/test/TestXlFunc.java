@@ -7,5 +7,6 @@ public class TestXlFunc {
   @Test
   public void testTemplateTradeData(){
     String[][] res = XlFunc.getTemplateTradeData();
+    System.out.println(res);
   }
 }
