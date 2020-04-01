@@ -9,6 +9,7 @@ import com.chendu.jq.core.equity.calculator.analytical.EuropeanVanillaCalculator
 import com.chendu.jq.core.equity.calculator.mc.MonteCarloCalculator;
 import com.chendu.jq.core.market.JqMarket;
 import com.chendu.jq.core.market.mktObj.JqTicker;
+import com.chendu.jq.core.util.JqConstant;
 import com.chendu.jq.core.util.JsonUtils;
 import lombok.Data;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -16,14 +17,23 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class SFP extends Option {
     public static ScriptEngineManager mgr = new ScriptEngineManager();
     public static ScriptEngine engine=mgr.getEngineByName("JavaScript");
+    public String payOffDefinition;
 
+    public List<String> koCond=new ArrayList<>();
+    public List<String> accCond=new ArrayList<>();
+    public List<String> normalCond=new ArrayList<>();
+
+    public List<String> tires=Arrays.asList(".*S[>|<].*", ".*St[>|<].*", ".*ST[>|<].*");
     public SFP(){
         super();
         tradeType = TradeType.SFP;
@@ -53,14 +63,64 @@ public class SFP extends Option {
 
     @Override
     public Double calcPayOff(LinkedHashMap<LocalDate, Double> path) {
+        try {
+            List<String> condExpr = Arrays.asList(this.payOffDefinition.split(JqConstant.semiColon));
 
-        Double price = path.get(exerciseDate);
-        return optionDirection == OptionDirection.Call ? Math.max(price-strike, 0.0) : Math.max(strike-price, 0.0);
+            koCond = condExpr.stream().filter(e -> e.matches(".*S[>|<].*")).collect(Collectors.toList());
+            accCond = condExpr.stream().filter(e -> e.matches(".*St[>|<].*")).collect(Collectors.toList());
+            normalCond = condExpr.stream().filter(e -> e.matches(".*ST[>|<].*")).collect(Collectors.toList());
+
+            if(koCond.size() > 0) {
+                for (int i = 0; i < koCond.size(); i++) {
+                    String condition = koCond.get(i).split(JqConstant.delim)[0];
+                    String payoff = koCond.get(i).split(JqConstant.delim)[1];
+                    for (LocalDate date : path.keySet()) {
+                        engine.put("S", path.get(date));
+                        if ((Boolean) engine.eval(condition)) {
+                            return (Double) engine.eval(payoff);
+                        }
+                    }
+                }
+            }
+
+            if(accCond.size() > 0) {
+                for (LocalDate date : path.keySet()) {
+                    Double rate = 0.0;
+                    for (int i = 0; i < accCond.size(); ++i) {
+                        String condition = accCond.get(i).split(JqConstant.delim)[0];
+                        String payoff = accCond.get(i).split(JqConstant.delim)[1];
+                        engine.put("St", path.get(date));
+                        if ((Boolean) engine.eval(condition)) {
+                            rate += (Double) engine.eval(payoff);
+                            break;
+                        }
+                    }
+                    return rate / path.size();
+                }
+            }
+
+            if(normalCond.size() > 0) {
+                for (int i = 0; i < normalCond.size(); ++i) {
+                    String condition = normalCond.get(i).split(JqConstant.delim)[0];
+                    String payoff = normalCond.get(i).split(JqConstant.delim)[1];
+                    engine.put("ST", path.get(exerciseDate));
+                    if ((Boolean) engine.eval(condition)) {
+                        return  (Double) engine.eval(payoff);
+                    }
+                }
+        }
+            Double price = path.get(exerciseDate);
+            return optionDirection == OptionDirection.Call ? Math.max(price - strike, 0.0) : Math.max(strike - price, 0.0);
+        } catch (Exception ex) {
+
+        }
+        return 0.0;
     }
 
     @Override
     public JqResult calc(JqMarket jqMarket) {
-        throw new NotImplementedException();
+        MonteCarloCalculator mc = new MonteCarloCalculator();
+        return mc.calc(this, jqMarket);
     }
 
     @Override
@@ -75,12 +135,10 @@ public class SFP extends Option {
         sfp.setMaturityDate(LocalDate.now().plusYears(1));
         sfp.setExerciseDate(LocalDate.now().plusYears(1));
         sfp.setStrike(1000.0);
-        sfp.setOptionDirection(OptionDirection.Call);
         sfp.setUnderlyingTicker(new JqTicker("SH000300"));
         sfp.setDayCount(new DayCount(DayCountType.Act365));
         sfp.setNotional(1.0);
-        sfp.setDomCurrency(Currency.Cny);
-        sfp.setValuationModel(ValuationModel.Analytical);
+        sfp.setPayOffDefinition("S>1.05,S-1.05;S<=1.05,0");
         return JqTrade.templateTradeData(SFP.class, sfp);
     }
 

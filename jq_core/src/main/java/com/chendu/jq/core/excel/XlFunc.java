@@ -111,11 +111,15 @@ public class XlFunc {
     }
 
     public static JqResult jqCalc(String[][] labelValue, String[][] mktData) {
+        JqResult jqResult = new JqResult();
         TableWithHeader twh = new TableWithHeader(transpose(labelValue));
-        JqTrade trade = twh.toTrades().get(0);
-        JqMarket mkt = XlUtil.toJqMarket(trade, mktData);
-
-        return trade.calc(mkt);
+        List<JqTrade> trades = twh.toTrades();
+        for (JqTrade trade:trades
+             ) {
+            JqMarket mkt = XlUtil.toJqMarket(trade, mktData);
+            jqResult.merge(trade.calc(mkt));
+        }
+        return jqResult;
     }
 
     public static String[][] transpose(String[][] matrix){

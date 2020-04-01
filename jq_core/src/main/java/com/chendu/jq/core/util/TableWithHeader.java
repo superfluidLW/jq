@@ -3,10 +3,8 @@ package com.chendu.jq.core.util;
 import com.chendu.jq.core.JqTrade;
 import com.chendu.jq.core.common.dayCount.DayCount;
 import com.chendu.jq.core.common.jqEnum.*;
-import com.chendu.jq.core.equity.DigitalOption;
-import com.chendu.jq.core.equity.DoubleBarrierOption;
-import com.chendu.jq.core.equity.RangeAccrual;
-import com.chendu.jq.core.equity.VanillaOption;
+import com.chendu.jq.core.equity.*;
+import com.chendu.jq.core.fixedIncome.Deposit;
 import com.chendu.jq.core.market.mktObj.JqTicker;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.sun.org.apache.xpath.internal.operations.Bool;
@@ -78,6 +76,12 @@ public class TableWithHeader {
                     break;
                 case DoubleBarrierOption:
                     trade = toClass(DoubleBarrierOption.class, i);
+                    break;
+                case SFP:
+                    trade = toClass(SFP.class, i);
+                    break;
+                case Deposit:
+                    trade = toClass(Deposit.class, i);
                     break;
             }
             if(trade != null){

@@ -6,12 +6,12 @@ import java.io.Serializable;
 
 @Data
 public class JqResult implements Serializable {
-    private Double pv;
-    public Double delta;
-    public Double gamma;
-    public Double vega;
-    public Double rho;
-    public Double theta;
+    private Double pv=0.0;
+    public Double delta=0.0;
+    public Double gamma=0.0;
+    public Double vega=0.0;
+    public Double rho=0.0;
+    public Double theta=0.0;
 
     public Double[][] toXlArray(){
         Double[][] result = new Double[6][1];
@@ -23,5 +23,14 @@ public class JqResult implements Serializable {
         result[5][0] = theta;
 
         return result;
+    }
+
+    public void merge(JqResult other){
+        pv += other.pv;
+        delta += other.delta;
+        gamma += other.gamma;
+        vega += other.vega;
+        rho += other.rho;
+        theta += other.theta;
     }
 }
