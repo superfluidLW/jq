@@ -9,7 +9,7 @@ import org.junit.Test;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
-public class TestSfpVanilla {
+public class TestSfpDigital {
 
   @Test
   public void test(){

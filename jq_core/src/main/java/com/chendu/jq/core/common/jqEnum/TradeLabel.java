@@ -26,7 +26,8 @@ public enum   TradeLabel {
     LRange("区间下限"),
     URange("区间上限"),
     Coupon("票息"),
-    PayOffDefinition("收益说明");
+    PayOffDefinition("收益说明"),
+    DepoRate("存款利率");
 
     @Getter
     private String nameCn;

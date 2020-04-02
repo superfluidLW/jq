@@ -48,7 +48,7 @@ public class VanillaOption extends Option {
     @Override
     public Double calcPayOff(LinkedHashMap<LocalDate, Double> path) {
         Double price = path.get(exerciseDate);
-        return optionDirection == OptionDirection.Call ? Math.max(price-strike, 0.0) : Math.max(strike-price, 0.0);
+        return (optionDirection == OptionDirection.Call ? Math.max(price-strike, 0.0) : Math.max(strike-price, 0.0))*notional;
     }
 
     @Override

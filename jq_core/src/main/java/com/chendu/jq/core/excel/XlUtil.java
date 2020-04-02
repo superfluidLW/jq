@@ -28,14 +28,16 @@ public class XlUtil {
                     if (mdt == MktDataType.RiskfreeRate) {
                         jqMarket.getYieldCurveMap().put(Currency.Cny, new JqCurve(rate));
                     }
-                    if (mdt == MktDataType.DividendRate) {
+                    if(trade instanceof Option) {
+                      if (mdt == MktDataType.DividendRate) {
                         jqMarket.getDividendCurveMap().put(((Option) trade).getUnderlyingTicker(), new JqCurve(rate));
-                    }
-                    if (mdt == MktDataType.S0) {
+                      }
+                      if (mdt == MktDataType.S0) {
                         jqMarket.getTickerMap().put(((Option) trade).getUnderlyingTicker(), new JqTickerInfo(rate));
-                    }
-                    if (mdt == MktDataType.Vol) {
+                      }
+                      if (mdt == MktDataType.Vol) {
                         jqMarket.getVolatilityMap().put(((Option) trade).getUnderlyingTicker(), new JqVol(rate));
+                      }
                     }
                 }
         }
