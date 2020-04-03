@@ -43,7 +43,7 @@ public class DigitalOption extends Option {
     @Override
     public Double calcPayOff(LinkedHashMap<LocalDate, Double> path) {
         Double price = path.get(exerciseDate);
-        return optionDirection == OptionDirection.Call ? (price>strike ? notional : 0.0) : (price < strike ? notional : 0.0);
+        return optionDirection == OptionDirection.Call ? (price>strike ? notional*digitalPayoff : 0.0) : (price < strike ? notional*digitalPayoff : 0.0);
     }
 
     @Override

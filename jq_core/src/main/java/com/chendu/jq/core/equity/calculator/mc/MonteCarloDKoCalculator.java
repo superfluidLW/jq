@@ -79,8 +79,8 @@ public class MonteCarloDKoCalculator extends OptionCalculator {
         Double drift = riskFreeRate - 0.5*volatility*volatility;
         stockPrice *= Math.exp(volatility*Math.sqrt(dt)*normal.sample() + drift*dt);
         pv = option.optionDirection == OptionDirection.Call
-            ? Math.max(stockPrice - strike, 0)
-            : Math.max(strike - stockPrice, 0);
+            ? Math.max(stockPrice - strike, 0) * option.getParticipationRate()
+            : Math.max(strike - stockPrice, 0) * option.getParticipationRate();
         pvAvg += (pv + option.getKiCoupon());
       }
       else

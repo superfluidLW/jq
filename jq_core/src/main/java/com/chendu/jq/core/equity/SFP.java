@@ -1,6 +1,7 @@
 package com.chendu.jq.core.equity;
 
 import com.chendu.jq.core.JqTrade;
+import com.chendu.jq.core.common.JqCalendar;
 import com.chendu.jq.core.common.JqCashflow;
 import com.chendu.jq.core.common.JqResult;
 import com.chendu.jq.core.common.dayCount.DayCount;
@@ -32,6 +33,7 @@ public class SFP extends Option {
     public List<String> koCond=new ArrayList<>();
     public List<String> accCond=new ArrayList<>();
     public List<String> normalCond=new ArrayList<>();
+    public static JqCalendar jqCalendar = new JqCalendar(Venue.Cib);
 
     public List<String> tires=Arrays.asList(".*S[>|<].*", ".*St[>|<].*", ".*ST[>|<].*");
     public SFP(){
@@ -61,6 +63,17 @@ public class SFP extends Option {
         return payoff;
     }
 
+    public List<LocalDate> obsDates() {
+        List<LocalDate> obsDates = new ArrayList<>();
+        for (LocalDate date = startDate; date.isBefore(exerciseDate) || date.equals(exerciseDate); date = date.plusDays(1)) {
+            if (jqCalendar.isBizDay(date)) {
+                obsDates.add(date);
+            }
+        }
+
+        return obsDates;
+    }
+
     @Override
     public Double calcPayOff(LinkedHashMap<LocalDate, Double> path) {
         try {
@@ -84,8 +97,9 @@ public class SFP extends Option {
             }
 
             if(accCond.size() > 0) {
-                for (LocalDate date : path.keySet()) {
-                    Double rate = 0.0;
+                Double rate = 0.0;
+                List<LocalDate> obsDates = obsDates();
+                for (LocalDate date : obsDates) {
                     for (int i = 0; i < accCond.size(); ++i) {
                         String condition = accCond.get(i).split(JqConstant.delim)[0];
                         String payoff = accCond.get(i).split(JqConstant.delim)[1];
@@ -95,8 +109,8 @@ public class SFP extends Option {
                             break;
                         }
                     }
-                    return rate / path.size();
                 }
+                return rate / obsDates.size();
             }
 
             if(normalCond.size() > 0) {
@@ -105,6 +119,10 @@ public class SFP extends Option {
                     String payoff = normalCond.get(i).split(JqConstant.delim)[1];
                     engine.put("ST", path.get(exerciseDate));
                     if ((Boolean) engine.eval(condition)) {
+                      if(payoff.equals("0.005+5.1*(1.0-ST > 0.04 ? 0.04 : 1.0-ST))")){
+                        int x = 1;
+                      }
+
                         return  (Double) engine.eval(payoff);
                     }
                 }

@@ -9,7 +9,7 @@ import org.junit.Test;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
-public class TestSfpDigital {
+public class TestSfpRangeAccrual {
 
   @Test
   public void test(){
@@ -25,7 +25,7 @@ public class TestSfpDigital {
     try {
       String[][] table = new String[2][];
       table[0] = new String[]{"产品类型", "开始日期", "到期日期",  "计息基准", "标的资产编码", "行权日期", "本币币种", "名义面额", "收益说明", "估值方法", "蒙特卡洛样本量", "计算MC希腊值"};
-      table[1] = new String[]{"SFP", "2019-02-28", "2020-02-28", "Act365", "SH000300", "2020-02-28", "人民币", "1", "ST>1,0.049;ST<=1.0,0.03", "MonteCarlo", "25000", "false"};
+      table[1] = new String[]{"SFP", "2019-02-28", "2020-02-28", "Act365", "SH000300", "2020-02-28", "人民币", "1", "St>=1.08,0.00;St>0.92,0.05;St<=0.92,0.00", "MonteCarlo", "25000", "false"};
 
       JqResult jqResult = XlFunc.jqCalc(XlFunc.transpose(table), getMarket());
 
@@ -40,10 +40,9 @@ public class TestSfpDigital {
     ScriptEngine engine = mgr.getEngineByName("JavaScript");
 
     try {
-      String[][] table = new String[3][];
-      table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "二值期权收益", "存款利率"};
-      table[1] = new String[]{"DigitalOption", "2019-02-28", "2020-02-28", "1.0", "Act365", "SH000300", "2020-02-28", "Analytical", "看涨", "人民币", "1", "0.019", ""};
-      table[2] = new String[]{"Deposit", "2019-02-28", "2020-02-28", "", "Act365", "", "", "", "", "人民币", "0.03", "", "0.0"};
+      String[][] table = new String[2][];
+      table[0] = new String[]{"产品类型", "开始日期", "到期日期", "计息基准", "标的资产编码", "行权日期", "估值方法", "本币币种", "名义面额", "区间下限", "区间上限", "票息"};
+      table[1] = new String[]{"RangeAccrual", "2019-02-28", "2020-02-28", "Act365", "SH000300", "2020-02-28", "Analytical", "人民币", "1.0", "0.92", "1.08", "0.05"};
 
       JqResult jqResult = XlFunc.jqCalc(XlFunc.transpose(table), getMarket());
 
@@ -59,10 +58,9 @@ public class TestSfpDigital {
     ScriptEngine engine = mgr.getEngineByName("JavaScript");
 
     try {
-      String[][] table = new String[3][];
-      table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "蒙特卡洛样本量", "计算MC希腊值", "期权方向", "本币币种", "名义面额", "二值期权收益", "存款利率"};
-      table[1] = new String[]{"DigitalOption", "2019-02-28", "2020-02-28", "1.0", "Act365", "SH000300", "2020-02-28", "MonteCarlo", "25000", "false", "看涨", "人民币", "1.0", "0.019", ""};
-      table[2] = new String[]{"Deposit", "2019-02-28", "2020-02-28", "", "Act365", "", "2020-02-28", "", "", "", "", "人民币", "0.03", "", "0.0"};
+      String[][] table = new String[2][];
+      table[0] = new String[]{"产品类型", "开始日期", "到期日期", "计息基准", "标的资产编码", "行权日期", "估值方法", "蒙特卡洛样本量", "本币币种", "名义面额", "区间下限", "区间上限", "票息"};
+      table[1] = new String[]{"RangeAccrual", "2019-02-28", "2020-02-28", "Act365", "SH000300", "2020-02-28", "MonteCarlo", "25000", "人民币", "1.0", "0.92", "1.08", "0.05"};
 
 
       JqResult jqResult = XlFunc.jqCalc(XlFunc.transpose(table), getMarket());

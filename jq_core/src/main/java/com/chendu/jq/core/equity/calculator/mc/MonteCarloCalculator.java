@@ -14,6 +14,7 @@ public class MonteCarloCalculator extends OptionCalculator {
     public Double calcPv(JqTrade trade, JqMarket jqMarket) {
         Option option = (Option)trade;
         List<LinkedHashMap<LocalDate, Double>> paths = PricePath.genPath(option, jqMarket);
+
         Double t = option.getDayCount().yearFraction(jqMarket.getMktDate(), option.getMaturityDate());
         Double df = jqMarket.getYieldCurveMap().get(option.getDomCurrency()).getDf(t);
 

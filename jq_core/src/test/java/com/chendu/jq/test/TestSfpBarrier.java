@@ -9,7 +9,7 @@ import org.junit.Test;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
-public class TestSfpDigital {
+public class TestSfpBarrier {
 
   @Test
   public void test(){
@@ -25,7 +25,7 @@ public class TestSfpDigital {
     try {
       String[][] table = new String[2][];
       table[0] = new String[]{"产品类型", "开始日期", "到期日期",  "计息基准", "标的资产编码", "行权日期", "本币币种", "名义面额", "收益说明", "估值方法", "蒙特卡洛样本量", "计算MC希腊值"};
-      table[1] = new String[]{"SFP", "2019-02-28", "2020-02-28", "Act365", "SH000300", "2020-02-28", "人民币", "1", "ST>1,0.049;ST<=1.0,0.03", "MonteCarlo", "25000", "false"};
+      table[1] = new String[]{"SFP", "2019-02-28", "2020-02-28", "Act365", "SH000300", "2020-02-28", "人民币", "1", "S<0.96,0.0435;ST<=1.0,0.005+5.1*(1.0-ST > 0.04 ? 0.04 : 1.0-ST);ST>1.0,0.005", "MonteCarlo", "5000", "false"};
 
       JqResult jqResult = XlFunc.jqCalc(XlFunc.transpose(table), getMarket());
 
@@ -40,10 +40,9 @@ public class TestSfpDigital {
     ScriptEngine engine = mgr.getEngineByName("JavaScript");
 
     try {
-      String[][] table = new String[3][];
-      table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "二值期权收益", "存款利率"};
-      table[1] = new String[]{"DigitalOption", "2019-02-28", "2020-02-28", "1.0", "Act365", "SH000300", "2020-02-28", "Analytical", "看涨", "人民币", "1", "0.019", ""};
-      table[2] = new String[]{"Deposit", "2019-02-28", "2020-02-28", "", "Act365", "", "", "", "", "人民币", "0.03", "", "0.0"};
+      String[][] table = new String[2][];
+      table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "低障碍", "高障碍", "敲出补偿", "敲入基础票息", "参与率"};
+      table[1] = new String[]{"DoubleBarrierOption", "2019-02-28", "2020-02-28", "1.00", "Act365", "SH000300", "2020-02-28", "Analytical", "看跌", "人民币", "1.0", "0.96", "1000", "0.0435", "0.005", "5.1"};
 
       JqResult jqResult = XlFunc.jqCalc(XlFunc.transpose(table), getMarket());
 
@@ -59,11 +58,9 @@ public class TestSfpDigital {
     ScriptEngine engine = mgr.getEngineByName("JavaScript");
 
     try {
-      String[][] table = new String[3][];
-      table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "蒙特卡洛样本量", "计算MC希腊值", "期权方向", "本币币种", "名义面额", "二值期权收益", "存款利率"};
-      table[1] = new String[]{"DigitalOption", "2019-02-28", "2020-02-28", "1.0", "Act365", "SH000300", "2020-02-28", "MonteCarlo", "25000", "false", "看涨", "人民币", "1.0", "0.019", ""};
-      table[2] = new String[]{"Deposit", "2019-02-28", "2020-02-28", "", "Act365", "", "2020-02-28", "", "", "", "", "人民币", "0.03", "", "0.0"};
-
+      String[][] table = new String[2][];
+      table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "低障碍", "高障碍", "敲出补偿", "敲入基础票息", "参与率"};
+      table[1] = new String[]{"DoubleBarrierOption", "2019-02-28", "2020-02-28", "1.00", "Act365", "SH000300", "2020-02-28", "MonteCarlo", "看跌", "人民币", "1.0", "0.96", "1000.0", "0.0435", "0.005", "5.1"};
 
       JqResult jqResult = XlFunc.jqCalc(XlFunc.transpose(table), getMarket());
       return jqResult;

@@ -27,8 +27,8 @@ public class TestDoubleBarrierOption {
     @Test
     public void validateDoubleBarrierCall(){
         String[][] table = new String[2][];
-        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "低障碍", "高障碍", "敲出补偿", "敲入基础票息"};
-        table[1] = new String[]{"DoubleBarrierOption", "2020-03-01", "2021-03-01", "1.05", "Act365", "SH000300", "2021-03-01", "Analytical", "看涨", "人民币", "1.0", "0.75", "1.25", "0.00", "0.00"};
+        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "低障碍", "高障碍", "敲出补偿", "敲入基础票息", "参与率"};
+        table[1] = new String[]{"DoubleBarrierOption", "2020-03-01", "2021-03-01", "1.05", "Act365", "SH000300", "2021-03-01", "Analytical", "看涨", "人民币", "1.0", "0.75", "1.25", "0.00", "0.00", "1.00"};
 
         String[][] mktData = new String[5][2];
         mktData[0][0]= MktDataType.RiskfreeRate.name();
@@ -60,8 +60,8 @@ public class TestDoubleBarrierOption {
     @Test
     public void validateDoubleBarrierPut(){
         String[][] table = new String[2][];
-        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "低障碍", "高障碍", "敲出补偿", "敲入基础票息"};
-        table[1] = new String[]{"DoubleBarrierOption", "2020-03-01", "2021-03-01", "1.05", "Act365", "SH000300", "2021-03-01", "Analytical", "看跌", "人民币", "1.0", "0.75", "1.25", "0.00", "0.00"};
+        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "低障碍", "高障碍", "敲出补偿", "敲入基础票息", "参与率"};
+        table[1] = new String[]{"DoubleBarrierOption", "2020-03-01", "2021-03-01", "1.05", "Act365", "SH000300", "2021-03-01", "Analytical", "看跌", "人民币", "1.0", "0.75", "1.25", "0.00", "0.00", "1.00"};
 
         String[][] mktData = new String[5][2];
         mktData[0][0]= MktDataType.RiskfreeRate.name();
@@ -94,8 +94,8 @@ public class TestDoubleBarrierOption {
     @Test
     public void validateDoubleBarrierPutMc(){
         String[][] table = new String[2][];
-        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "低障碍", "高障碍", "敲出补偿", "敲入基础票息"};
-        table[1] = new String[]{"DoubleBarrierOption", "2020-02-28", "2021-02-28", "1.05", "Act365", "SH000300", "2021-03-01", "MonteCarlo", "看跌", "人民币", "1.0", "0.75", "1.25", "0.00", "0.00"};
+        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "低障碍", "高障碍", "敲出补偿", "敲入基础票息", "参与率"};
+        table[1] = new String[]{"DoubleBarrierOption", "2020-02-28", "2021-02-28", "1.05", "Act365", "SH000300", "2021-03-01", "MonteCarlo", "看跌", "人民币", "1.0", "0.75", "1.25", "0.00", "0.00", "1.0"};
 
         String[][] mktData = new String[5][2];
         mktData[0][0]= MktDataType.RiskfreeRate.name();
@@ -123,8 +123,8 @@ public class TestDoubleBarrierOption {
     @Test
     public void validateDoubleBarrierCallMc(){
         String[][] table = new String[2][];
-        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "低障碍", "高障碍", "敲出补偿", "敲入基础票息"};
-        table[1] = new String[]{"DoubleBarrierOption", "2020-02-28", "2021-02-28", "1.05", "Act365", "SH000300", "2021-03-01", "MonteCarlo", "看涨", "人民币", "1.0", "0.75", "1.25", "0.00", "0.00"};
+        table[0] = new String[]{"产品类型", "开始日期", "到期日期", "行权价格", "计息基准", "标的资产编码", "行权日期", "估值方法", "期权方向", "本币币种", "名义面额", "低障碍", "高障碍", "敲出补偿", "敲入基础票息", "参与率"};
+        table[1] = new String[]{"DoubleBarrierOption", "2020-02-28", "2021-02-28", "1.05", "Act365", "SH000300", "2021-03-01", "MonteCarlo", "看涨", "人民币", "1.0", "0.75", "1.25", "0.00", "0.00", "1.00"};
 
         String[][] mktData = new String[5][2];
         mktData[0][0]= MktDataType.RiskfreeRate.name();

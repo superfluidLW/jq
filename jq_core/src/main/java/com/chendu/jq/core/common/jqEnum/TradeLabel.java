@@ -25,6 +25,7 @@ public enum   TradeLabel {
     KiCoupon("敲入基础票息"),
     LRange("区间下限"),
     URange("区间上限"),
+    ParticipationRate("参与率"),
     Coupon("票息"),
     PayOffDefinition("收益说明"),
     DepoRate("存款利率");

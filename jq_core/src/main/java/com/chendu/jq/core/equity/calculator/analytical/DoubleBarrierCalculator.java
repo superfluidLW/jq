@@ -39,6 +39,7 @@ class BarrierOptionFourierPvPricer
 
     private double _rebate;
     private double _coupon;
+    private double _participationRate;
 
     public BarrierOptionFourierPvPricer(DoubleBarrierOption barrierOption, JqMarket jqMarket)
     {
@@ -59,6 +60,7 @@ class BarrierOptionFourierPvPricer
         _r = riskFreeRate;
         _B = barrierOption.getUBarrier();
         _A = barrierOption.getLBarrier();
+        _participationRate = barrierOption.getParticipationRate();
 
         b = Math.log(_B);
         a = Math.log(_A);
@@ -76,9 +78,9 @@ class BarrierOptionFourierPvPricer
         switch (_optionType)
         {
             case Call:
-                return  Math.exp(-_r * _T) * (CallCalc() + rebate + coupon);
+                return  Math.exp(-_r * _T) * (CallCalc()*_participationRate + rebate + coupon);
             case Put:
-                return Math.exp(-_r * _T) * (PutCalc() + coupon + coupon);
+                return Math.exp(-_r * _T) * (PutCalc()*_participationRate + rebate + coupon);
         }
         return Double.NaN;
     }

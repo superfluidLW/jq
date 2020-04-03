@@ -23,6 +23,7 @@ public class DoubleBarrierOption extends Option {
     public Double kiCoupon;
     public Double lBarrier;
     public Double uBarrier;
+    public Double participationRate;
 
     public DoubleBarrierOption(){
         super();
