@@ -2,6 +2,8 @@ package com.chendu.jq.test;
 
 import com.chendu.jq.core.common.JqResult;
 import com.chendu.jq.core.common.jqEnum.MktDataType;
+import com.chendu.jq.core.equity.RangeAccrual;
+import com.chendu.jq.core.equity.SFP;
 import com.chendu.jq.core.excel.XlFunc;
 import com.chendu.jq.core.util.JsonUtils;
 import org.junit.Test;
@@ -33,6 +35,15 @@ public class TestSfpVanilla {
     } catch (Exception ex) {
       return new JqResult();
     }
+  }
+
+  @Test
+  public void testTemplateTradeData(){
+    String[][] trade = XlFunc.transpose(SFP.templateTradeData());
+
+    JqResult jqResult = XlFunc.jqCalc(XlFunc.transpose(trade), getMarket());
+
+    System.out.println(JsonUtils.writeValueAsString(jqResult));
   }
 
   public JqResult combo() {

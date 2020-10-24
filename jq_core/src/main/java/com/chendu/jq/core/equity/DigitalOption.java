@@ -37,7 +37,16 @@ public class DigitalOption extends Option {
 
     @Override
     public Double[][] payOffChart() {
-        return new Double[0][];
+        double delta = strike * 0.01;
+        Double[][] payoff = new Double[40][2];
+        int offset = payoff.length/2;
+        for(int i = 0; i < payoff.length; ++i){
+            Double price = strike + (i-offset) * delta;
+            Double po = optionDirection == OptionDirection.Call ? (price>strike ? notional*digitalPayoff : 0.0) : (price < strike ? notional*digitalPayoff : 0.0);
+            payoff[i][0] = price;
+            payoff[i][1] = po;
+        }
+        return payoff;
     }
 
     @Override

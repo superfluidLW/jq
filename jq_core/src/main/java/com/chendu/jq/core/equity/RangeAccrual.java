@@ -50,7 +50,16 @@ public class RangeAccrual extends Option {
 
     @Override
     public Double[][] payOffChart() {
-        return new Double[0][];
+        double delta = 4*(uRange-lRange)/40.0;
+        Double[][] payoff = new Double[40][2];
+        int offset = payoff.length/2;
+        for(int i = 0; i < payoff.length; ++i){
+            Double price = strike + (i-offset) * delta;
+            Double po = (price > lRange && price < uRange) ? coupon : 0.0;
+            payoff[i][0] = price;
+            payoff[i][1] = po;
+        }
+        return payoff;
     }
 
     @Override
@@ -106,10 +115,13 @@ public class RangeAccrual extends Option {
         rangeAccrual.setDayCount(new DayCount(DayCountType.Act365));
         rangeAccrual.setNotional(1.0);
         rangeAccrual.setDomCurrency(Currency.Cny);
-        rangeAccrual.setLRange(3000.0);
-        rangeAccrual.setLRange(3050.0);
-        rangeAccrual.setLRange(0.025);
+        rangeAccrual.setLRange(950.0);
+        rangeAccrual.setURange(1025.0);
+        rangeAccrual.setStrike(995.0);
+        rangeAccrual.setCoupon(0.025);
         rangeAccrual.setValuationModel(ValuationModel.Analytical);
+
+
         return JqTrade.templateTradeData(RangeAccrual.class, rangeAccrual);
     }
 

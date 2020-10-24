@@ -62,7 +62,7 @@ public class XlFunc {
             isVolatile = true
     )
     public static String[][] getTemplateTradeData() {
-        List<Class> classes = Arrays.asList(VanillaOption.class, DigitalOption.class, DoubleBarrierOption.class, RangeAccrual.class);
+        List<Class> classes = Arrays.asList(VanillaOption.class, DigitalOption.class, DoubleBarrierOption.class, RangeAccrual.class, SFP.class);
         List<String[][]> templates = new ArrayList<>();
         int maxRow = 0;
         for(int i = 0; i < classes.size(); ++i){
@@ -114,6 +114,9 @@ public class XlFunc {
         JqResult jqResult = new JqResult();
         TableWithHeader twh = new TableWithHeader(transpose(labelValue));
         List<JqTrade> trades = twh.toTrades();
+        System.out.println(JsonUtils.writeValueAsString(trades.get(0)));
+        System.out.println(JsonUtils.writeValueAsString(mktData));
+
         for (JqTrade trade:trades
              ) {
             JqMarket mkt = XlUtil.toJqMarket(trade, mktData);

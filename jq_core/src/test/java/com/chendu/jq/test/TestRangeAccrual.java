@@ -6,6 +6,7 @@ import com.chendu.jq.core.common.dayCount.DayCount;
 import com.chendu.jq.core.common.jqEnum.DayCountType;
 import com.chendu.jq.core.common.jqEnum.MktDataType;
 import com.chendu.jq.core.equity.DigitalOption;
+import com.chendu.jq.core.equity.RangeAccrual;
 import com.chendu.jq.core.excel.XlFunc;
 import com.chendu.jq.core.market.mktObj.JqTicker;
 import com.chendu.jq.core.util.JsonUtils;
@@ -22,6 +23,30 @@ public class TestRangeAccrual {
 
         DayCount dc = new DayCount(DayCountType.Act365);
         System.out.println(dc.toString());
+    }
+
+    @Test
+    public void testTemplateTradeData(){
+        String[][] trade = XlFunc.transpose(RangeAccrual.templateTradeData());
+        String[][] mktData = new String[5][2];
+        mktData[0][0]= MktDataType.RiskfreeRate.name();
+        mktData[0][1] = "0.05";
+
+        mktData[1][0]= MktDataType.DividendRate.name();
+        mktData[1][1] = "0.02";
+
+        mktData[2][0]= MktDataType.S0.name();
+        mktData[2][1] = "3008.0";
+
+        mktData[3][0]= MktDataType.Vol.name();
+        mktData[3][1] = "0.2";
+
+        mktData[4][0]= MktDataType.MktDate.name();
+        mktData[4][1] = "2020-03-01";
+
+        JqResult jqResult = XlFunc.jqCalc(XlFunc.transpose(trade), mktData);
+
+        System.out.println(JsonUtils.writeValueAsString(jqResult));
     }
 
     @Test

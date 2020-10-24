@@ -40,7 +40,23 @@ public class DoubleBarrierOption extends Option {
 
     @Override
     public Double[][] payOffChart() {
-        return new Double[0][];
+        double delta = 2*(uBarrier-lBarrier)/40.0;
+        Double[][] payoff = new Double[40][2];
+        int offset = payoff.length/2;
+        for(int i = 0; i < payoff.length; ++i){
+            Double price = strike + (i-offset) * delta;
+            Double po;
+            if(price > uBarrier || price < lBarrier){
+                po = koRebate;
+            }
+            else{
+                po = optionDirection == OptionDirection.Call ? Math.max(price-strike, 0) : Math.max(strike-price, 0);
+                po = po * participationRate + kiCoupon;
+            }
+            payoff[i][0] = price;
+            payoff[i][1] = po;
+        }
+        return payoff;
     }
 
     @Override
@@ -78,13 +94,16 @@ public class DoubleBarrierOption extends Option {
         doubleBarrierOption.setOptionDirection(OptionDirection.Call);
         doubleBarrierOption.setUnderlyingTicker(new JqTicker("SH000300"));
         doubleBarrierOption.setDayCount(new DayCount(DayCountType.Act365));
-        doubleBarrierOption.setNotional(1.0);
+        doubleBarrierOption.setNotional(1000000.0);
         doubleBarrierOption.setDomCurrency(Currency.Cny);
-        doubleBarrierOption.setLBarrier(900.0);
-        doubleBarrierOption.setUBarrier(1100.0);
+        doubleBarrierOption.setLBarrier(0.875);
+        doubleBarrierOption.setUBarrier(1.035);
+        doubleBarrierOption.setStrike(0.95);
         doubleBarrierOption.setKoRebate(0.025);
         doubleBarrierOption.setKiCoupon(0.03);
+        doubleBarrierOption.setParticipationRate(1.00);
         doubleBarrierOption.setValuationModel(ValuationModel.Analytical);
+
         return JqTrade.templateTradeData(DoubleBarrierOption.class, doubleBarrierOption);
     }
 

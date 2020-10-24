@@ -3,6 +3,7 @@ package com.chendu.jq.core.util;
 import com.chendu.jq.core.JqTrade;
 import com.chendu.jq.core.common.dayCount.DayCount;
 import com.chendu.jq.core.common.jqEnum.*;
+import com.chendu.jq.core.common.jqEnum.Currency;
 import com.chendu.jq.core.equity.*;
 import com.chendu.jq.core.fixedIncome.Deposit;
 import com.chendu.jq.core.market.mktObj.JqTicker;
@@ -16,10 +17,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
@@ -29,7 +27,8 @@ public class TableWithHeader {
 
     public TableWithHeader(String[][] table){
         for(int col = 0; col < table[0].length; ++col){
-            headers.add(table[0][col]);
+            if(table[0][col] != null)
+                headers.add(table[0][col]);
         }
 
         for(int row = 1; row < table.length; ++row){
@@ -103,7 +102,7 @@ public class TableWithHeader {
 
         Field[] fields = T.getFields();
         Map<String, Field> fieldMap = Arrays.stream(fields).collect(Collectors.toMap(e -> e.getName().toLowerCase(), e -> e));
-        Map<String, TradeLabel> headerLabelMap = headers.stream().collect(Collectors.toMap(e -> e, e -> JqParser.enumFromStr(e, TradeLabel.class)));
+        Map<String, TradeLabel> headerLabelMap = headers.stream().filter(Objects::nonNull).collect(Collectors.toMap(e -> e, e -> JqParser.enumFromStr(e, TradeLabel.class)));
 
         List<String> row = rows.get(nRow);
 
