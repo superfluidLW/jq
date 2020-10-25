@@ -51,12 +51,14 @@ public class SFP extends Option {
 
     @Override
     public Double[][] payOffChart() {
-        double delta = strike * 0.01;
-        Double[][] payoff = new Double[40][2];
+        double delta = 0.2/50;
+        Double[][] payoff = new Double[100][2];
         int offset = payoff.length/2;
         for(int i = 0; i < payoff.length; ++i){
-            Double price = strike + (i-offset) * delta;
-            calcPayOff(new LinkedHashMap<LocalDate, Double>(){{put(LocalDate.now(), price);}});
+            Double price = 1.0 + (i-offset) * delta;
+
+            payoff[i][0] = price;
+            payoff[i][1] = calcPayOff(new LinkedHashMap<LocalDate, Double>(){{put(exerciseDate, price);}});
         }
         return payoff;
     }
@@ -150,12 +152,11 @@ public class SFP extends Option {
         sfp.setStartDate(LocalDate.now());
         sfp.setMaturityDate(LocalDate.now().plusYears(1));
         sfp.setExerciseDate(LocalDate.now().plusYears(1));
-        sfp.setStrike(1000.0);
         sfp.setDomCurrency(Currency.Cny);
         sfp.setUnderlyingTicker(new JqTicker("SH000300"));
         sfp.setDayCount(new DayCount(DayCountType.Act365));
         sfp.setNotional(1.0);
-        sfp.setPayOffDefinition("S>1050,S-1000;S<=1050,0");
+        sfp.setPayOffDefinition("ST>=1.05,0.02;ST>0.85,0.02+(1.05-ST)*0.25;ST<=0.85,0.07");
         sfp.setValuationModel(ValuationModel.MonteCarlo);
         sfp.setNumMcPath(1000);
         sfp.setCalcMcGreeks(true);

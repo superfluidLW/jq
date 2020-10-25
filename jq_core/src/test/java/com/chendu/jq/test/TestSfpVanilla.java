@@ -1,15 +1,18 @@
 package com.chendu.jq.test;
 
+import com.chendu.jq.core.JqTrade;
 import com.chendu.jq.core.common.JqResult;
 import com.chendu.jq.core.common.jqEnum.MktDataType;
 import com.chendu.jq.core.equity.RangeAccrual;
 import com.chendu.jq.core.equity.SFP;
 import com.chendu.jq.core.excel.XlFunc;
 import com.chendu.jq.core.util.JsonUtils;
+import com.chendu.jq.core.util.TableWithHeader;
 import org.junit.Test;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
+import java.util.List;
 
 public class TestSfpVanilla {
 
@@ -40,6 +43,10 @@ public class TestSfpVanilla {
   @Test
   public void testTemplateTradeData(){
     String[][] trade = XlFunc.transpose(SFP.templateTradeData());
+
+    TableWithHeader twh = new TableWithHeader(trade);
+    List<JqTrade> trades = twh.toTrades();
+    System.out.println(JsonUtils.writeValueAsString(((SFP)trades.get(0)).payOffChart()));
 
     JqResult jqResult = XlFunc.jqCalc(XlFunc.transpose(trade), getMarket());
 
