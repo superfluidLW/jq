@@ -1,0 +1,44 @@
+<customUI xmlns="http://schemas.microsoft.com/office/2006/01/customui"
+          loadImage="jinx.loadImage">  <!-- jinx.loadImage is a built-in image loader -->
+    <ribbon>
+        <tabs>
+            <tab id="jinx_example_tab" label="Jinx Example Tab">
+                <group id="Tools" label="Tools">
+                    <button id="Reload"
+                            size="large"
+                            label="Reload Jinx"
+                            onAction="jinx.reload"
+                            image="com/exceljava/jinx/examples/icons/reload.png"/>
+                    <button id="LogFile"
+                            size="large"
+                            label="Log File"
+                            onAction="jinx.openLogFile"
+                            image="com/exceljava/jinx/examples/icons/log.png"/>
+                    <button id="About"
+                            size="large"
+                            label="About Jinx"
+                            onAction="jinx.about"
+                            image="com/exceljava/jinx/examples/icons/about.png"/>
+                </group>
+                <group id="Controls" label="Control Examples">
+                    <checkBox id="CheckBox"
+                              label="CheckBox"
+                              getPressed="jinx.examples.checkboxInitialState"
+                              onAction="jinx.examples.checkboxOnAction"/>
+                    <dropDown id="StaticDropdown"
+                              label="Static Dropdown"
+                              onAction="jinx.examples.dropDownOnAction">
+                        <item id="DropDownItem1" label="Info" imageMso="Info"/>
+                        <item id="DropDownItem2" label="HappyFace" imageMso="HappyFace"/>
+                    </dropDown>
+                    <comboBox id="ComboBox"
+                              label="ComboBox"
+                              onChange="jinx.examples.comboBoxOnChange"
+                              getItemCount="jinx.examples.comboBoxItemCount"
+                              getItemLabel="jinx.examples.comboBoxItem"
+                              getText="jinx.examples.comboBoxInitialItem"/>
+                </group>
+            </tab>
+        </tabs>
+    </ribbon>
+</customUI>
