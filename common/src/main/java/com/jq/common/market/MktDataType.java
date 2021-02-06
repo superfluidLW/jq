@@ -11,9 +11,9 @@ public enum MktDataType {
 
 
     @Getter
-    private String nameCn;
+    private String description;
 
-    MktDataType(String nameCn){
-        this.nameCn = nameCn;
+    MktDataType(String description){
+        this.description = description;
     }
 }

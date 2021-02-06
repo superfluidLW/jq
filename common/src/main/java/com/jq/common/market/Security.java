@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Data
-public class Security extends MktObj implements Serializable {
+public class Security extends MktData implements Serializable {
     private Venue venue;
     private String symbol;
     public Security(){
@@ -23,16 +23,16 @@ public class Security extends MktObj implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Security that = (Security) o;
-        return id .equals(that.id) && venue.equals(that.venue);
+        return symbol .equals(that.symbol) && venue.equals(that.venue);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, venue);
+        return Objects.hash(symbol, venue);
     }
 
     @Override
     public String toString(){
-        return id;
+        return symbol;
     }
 }

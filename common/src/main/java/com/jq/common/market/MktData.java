@@ -5,6 +5,6 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public abstract class MktObj implements Serializable {
+public abstract class MktData implements Serializable {
     protected String id;
 }

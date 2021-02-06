@@ -7,10 +7,10 @@ import org.junit.Test;
 public class TestJqEnum {
     @Test
     public void TestEnumParser(){
-        Venue venue = JqParser.enumFromStr("ShExg", Venue.class);
+        Venue venue = JqParser.parseEnum("ShExg", Venue.class);
         assert venue == Venue.ShExg;
 
-        venue = JqParser.enumFromStr("上海证券交易所", Venue.class);
+        venue = JqParser.parseEnum("上海证券交易所", Venue.class);
         assert venue == Venue.ShExg;
     }
 }

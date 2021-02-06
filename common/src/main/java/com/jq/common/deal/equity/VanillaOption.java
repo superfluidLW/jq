@@ -1,32 +1,40 @@
 package com.jq.common.deal.equity;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jq.common.convention.*;
-import com.jq.common.deal.Deal;
 import com.jq.common.deal.DealType;
 import com.jq.common.market.Market;
 import com.jq.common.market.Security;
 import com.jq.common.output.CashFlow;
+import com.jq.common.output.JsonUtils;
 import com.jq.common.output.Result;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Data
+@Slf4j
 public class VanillaOption extends Option {
-    public VanillaOption(){
+    public VanillaOption() {
         super();
         dealType = DealType.VanillaOption;
     }
 
     @Override
     public Option bumpMaturity(int offset) {
-//        VanillaOption vo = JsonMapper.readValue(JsonMapper.writeValueAsString(this), VanillaOption.class);
-//        vo.setMaturityDate(this.maturityDate.plusDays(offset));
-//        vo.setExerciseDate(exerciseDate.plusDays(offset));
-        return null;
+        try {
+            VanillaOption vo = JsonUtils.readValue(JsonUtils.writeValueAsString(this), VanillaOption.class);
+
+            vo.setMaturityDate(this.maturityDate.plusDays(offset));
+            vo.setExerciseDate(exerciseDate.plusDays(offset));
+            return vo;
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return null;
+        }
     }
 
     @Override
@@ -49,23 +57,6 @@ public class VanillaOption extends Option {
         return (optionDirection == OptionDirection.Call ? Math.max(price-strike, 0.0) : Math.max(strike-price, 0.0))*notional;
     }
 
-    public Result calc(Market market) {
-//        if(valuationModel == ValuationModel.MonteCarlo){
-//            MonteCarloCalculator mc = new MonteCarloCalculator();
-//            return mc.calc(this, jqMarket);
-//        }
-//        else{
-//            EuropeanVanillaCalculator evc = new EuropeanVanillaCalculator();
-//            return evc.calc(this, jqMarket);
-//        }
-        return null;
-    }
-
-    public List<CashFlow> cashflows(Market market) {
-//        double price = jqMarket.getTickerMap().get(underlyingTicker).getPrice();
-        return null;
-    }
-
     public static VanillaOption sampleDeal() {
         VanillaOption vanillaOption = new VanillaOption();
         vanillaOption.setStartDate(LocalDate.now());
@@ -81,8 +72,4 @@ public class VanillaOption extends Option {
         return vanillaOption;
     }
 
-    @Override
-    public List<CashFlow> calcPayoff() {
-        return null;
-    }
 }

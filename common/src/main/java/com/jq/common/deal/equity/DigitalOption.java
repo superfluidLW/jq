@@ -88,9 +88,4 @@ public class DigitalOption extends Option {
         digitalOption.setValuationModel(ValuationModel.Analytical);
         return Deal.templateTradeData(DigitalOption.class, digitalOption);
     }
-
-    @Override
-    public List<CashFlow> calcPayoff() {
-        return null;
-    }
 }

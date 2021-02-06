@@ -3,7 +3,7 @@ package com.jq.common.market;
 import lombok.Data;
 
 @Data
-public class Volatility extends MktObj {
+public class Volatility extends MktData {
     private Double vol;
 
     public Volatility(Double vol){

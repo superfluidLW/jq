@@ -1,13 +1,15 @@
 package com.jq.common.market;
 
 import com.jq.common.convention.Currency;
+import com.jq.common.deal.Deal;
+import com.jq.common.deal.equity.Option;
 import com.jq.common.market.curve.SwapCurve;
 import com.jq.common.market.quote.SecurityQuote;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +35,18 @@ public class Market implements Serializable {
         return jqCurve;
     }
 
+    public List<MktAction> bumpSecuritySpot(Security underlying, Double bump){
+        return Arrays.asList(new MktAction("securityQuoteMap", underlying, bump));
+    }
+
+    public List<MktAction> bumpVol(Security underlying, Double bump){
+        return Arrays.asList(new MktAction("volatilityMap", underlying, bump));
+    }
+
+    public List<MktAction> bumpYieldCurve(Currency currency, Double bump){
+        return Arrays.asList(new MktAction("yieldCurveMap", currency, bump));
+    }
+
     public Double tickerVol(Security ticker){
         Double vol = volatilityMap.get(ticker).getVol();
         if(actions.containsKey("volatilityMap")){
@@ -45,16 +59,16 @@ public class Market implements Serializable {
 
     public Double tickerPrice(Security security) {
         Double price = securityQuoteMap.get(security).getQuote();
-        if(actions.containsKey("tickerMap")){
-            if(actions.get("tickerMap").containsKey(security)){
-                price += actions.get("tickerMap").get(security).bumpValue;
+        if(actions.containsKey("securityQuoteMap")){
+            if(actions.get("securityQuoteMap").containsKey(security)){
+                price += actions.get("securityQuoteMap").get(security).bumpValue;
             }
         }
         return price;
     }
 
     public void updateActions(List<MktAction> newActions) {
-        Map<String, List<MktAction>> groups = newActions.stream().collect(Collectors.groupingBy(e -> e.jqMktField.getName()));
+        Map<String, List<MktAction>> groups = newActions.stream().collect(Collectors.groupingBy(e -> e.field));
         actions = new HashMap<>();
         for (String field : groups.keySet()
                 ) {
@@ -62,36 +76,6 @@ public class Market implements Serializable {
             for (MktAction mktAction : groups.get(field)) {
                 actions.get(field).put(mktAction.mktObj, mktAction);
             }
-        }
-    }
-
-    public static Field tickerField(){
-        try {
-            return Market.class.getField("securityQuoteMap");
-        }
-        catch (Exception ex){
-            System.out.println("Get field failed!");
-            return null;
-        }
-    }
-
-    public static Field yieldCurveField(){
-        try {
-            return Market.class.getField("yieldCurveMap");
-        }
-        catch (Exception ex){
-            System.out.println("Get field failed!");
-            return null;
-        }
-    }
-
-    public static Field volatilityField(){
-        try {
-            return Market.class.getField("volatilityMap");
-        }
-        catch (Exception ex){
-            System.out.println("Get field failed!");
-            return null;
         }
     }
 }

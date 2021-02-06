@@ -103,8 +103,4 @@ public class DoubleBarrierOption extends Option {
         return Deal.templateTradeData(DoubleBarrierOption.class, doubleBarrierOption);
     }
 
-    @Override
-    public List<CashFlow> calcPayoff() {
-        return null;
-    }
 }

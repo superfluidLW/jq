@@ -3,14 +3,14 @@ package com.jq.common.market;
 import java.lang.reflect.Field;
 
 public class MktAction {
-    public Field jqMktField;
+    public String field;
     public Object mktObj;
     public Double bumpValue;
 
-    public MktAction(Field field,
+    public MktAction(String field,
                      Object mktObj,
                      Double bumpValue){
-        this.jqMktField = field;
+        this.field = field;
         this.mktObj = mktObj;
         this.bumpValue = bumpValue;
     }

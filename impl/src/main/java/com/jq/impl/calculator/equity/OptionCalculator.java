@@ -29,26 +29,26 @@ public abstract class OptionCalculator implements ICalculator {
             return result;
         }
 
-//        Double deltaSpot = market.tickerPrice(option.getUnderlying()) / 10000.0;
-//        market.updateActions(option.bumpSpot(deltaSpot));
-//        Double pvSpotUp = calcPv(option, market);
-//        market.updateActions(option.bumpSpot(-deltaSpot));
-//        Double pvSpotDown = calcPv(option, market);
-//
-//        Double delta = (pvSpotUp-pvSpotDown)/(2*deltaSpot);
-//        Double gamma = (pvSpotUp + pvSpotDown - 2.0*pv)/(deltaSpot*deltaSpot);
-//
-//        market.updateActions(option.bumpVol(0.01));
-//        Double pvVolUp = calcPv(trade, market);
-//        market.updateActions(option.bumpVol(-0.01));
-//        Double pvVolDown = calcPv(trade, market);
-//        Double vega = (pvVolUp - pvVolDown) / 2.0;
-//
-//        market.updateActions(option.bumpYieldCurve(0.0001));
-//        Double pvRup = calcPv(trade, market);
-//        market.updateActions(option.bumpYieldCurve(-0.0001));
-//        Double pvRdown = calcPv(trade, market);
-//        Double rho = (pvRup - pvRdown)/2.0;
+        Double deltaSpot = market.tickerPrice(option.getUnderlying()) / 10000.0;
+        market.updateActions(market.bumpSecuritySpot(option.getUnderlying(), deltaSpot));
+        Double pvSpotUp = calcPv(option, market);
+        market.updateActions(market.bumpSecuritySpot(option.getUnderlying(), -deltaSpot));
+        Double pvSpotDown = calcPv(option, market);
+
+        Double delta = (pvSpotUp-pvSpotDown)/(2*deltaSpot);
+        Double gamma = (pvSpotUp + pvSpotDown - 2.0*pv)/(deltaSpot*deltaSpot);
+
+        market.updateActions(market.bumpVol(option.getUnderlying(), 0.01));
+        Double pvVolUp = calcPv(trade, market);
+        market.updateActions(market.bumpVol(option.getUnderlying(),-0.01));
+        Double pvVolDown = calcPv(trade, market);
+        Double vega = (pvVolUp - pvVolDown) / 2.0;
+
+        market.updateActions(market.bumpYieldCurve(option.getDomCurrency(),0.0001));
+        Double pvRup = calcPv(trade, market);
+        market.updateActions(market.bumpYieldCurve(option.getDomCurrency(),-0.0001));
+        Double pvRdown = calcPv(trade, market);
+        Double rho = (pvRup - pvRdown)/2.0;
 
         market.updateActions(new ArrayList<>());
         Option tradeMaturityBumped = ((Option) trade).bumpMaturity(-1);
@@ -56,10 +56,10 @@ public abstract class OptionCalculator implements ICalculator {
         Double theta = pvMaturityBumped - pv;
 
         result.setPv(pv);
-//        result.setDelta(delta);
-//        result.setVega(vega);
-//        result.setRho(rho);
-//        result.setGamma(gamma);
+        result.setDelta(delta);
+        result.setVega(vega);
+        result.setRho(rho);
+        result.setGamma(gamma);
         result.setTheta(theta);
         return result;
     }

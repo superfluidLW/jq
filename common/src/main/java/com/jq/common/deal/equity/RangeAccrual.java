@@ -121,8 +121,4 @@ public class RangeAccrual extends Option {
         return Deal.templateTradeData(RangeAccrual.class, rangeAccrual);
     }
 
-    @Override
-    public List<CashFlow> calcPayoff() {
-        return null;
-    }
 }
